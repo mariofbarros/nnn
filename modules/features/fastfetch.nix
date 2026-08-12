@@ -35,7 +35,7 @@
         },
         {
             "type": "cpu",
-            "key": "│ ├󰍛CPU",
+            "key": "│ ├󰍛 CPU",
             "showPeCoreCount": true,
             "format": "{1}",
             "keyColor": "green"
@@ -82,12 +82,6 @@
             "keyColor": "yellow"
         },
         {
-            "type": "command",
-            "key": "│ ├ OS Age",
-            "keyColor": "yellow",
-            "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
-        },
-        {
             "type": "uptime",
             "key": "└ └ Uptime",
             "keyColor": "yellow"
@@ -99,19 +93,13 @@
             "keyColor": "blue"
         },
         {
-            "type": "lm",
-            "key": "│ ├ LM",
-            "keyColor": "blue"
-        },
-        {
             "type": "wm",
             "key": "│ ├ WM",
             "keyColor": "blue"
         },
         {
-            "type": "gpu",
-            "key": "│ ├󰍛 GPU Driver",
-            "format": "{3}",
+            "type": "lm",
+            "key": "│ ├ LM",
             "keyColor": "blue"
         },
         {

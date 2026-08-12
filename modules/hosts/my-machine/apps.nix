@@ -20,6 +20,7 @@
       kdePackages.kio-extras  # extra protocols: sftp, trash, etc.
       yazi
       htop
+      love
     ];
   };
 }

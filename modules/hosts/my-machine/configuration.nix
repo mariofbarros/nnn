@@ -11,7 +11,6 @@
       self.nixosModules.fastfetch
       self.nixosModules.theming
       self.nixosModules.starship
-      self.nixosModules.tmux
     ];
 
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -78,18 +77,7 @@
       enable = true;
 
       interactiveShellInit = ''
-        # A fresh, independent tmux session per window -- not a shared one.
-        # (Previously used `new-session -A -s main`, which attached every
-        # window to the same session/panes -- e.g. running yazi in one
-        # window made it show up in every other window too, since they
-        # were all just different views onto the same underlying session.)
-        # The TMUX check stops this from re-firing when tmux itself opens
-        # a new pane/window, which also starts a fresh fish shell.
-        
-        if status is-interactive; and not set -q TMUX
-            exec tmux new-session
-        end
-
+ 
         function nrs --description "nixos-rebuild switch, with a real check that it actually applied"
             if test "$XDG_SESSION_TYPE" = "wayland"
                 echo "Note: running from inside the graphical session. If this rebuild touches" \
