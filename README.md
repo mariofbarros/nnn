@@ -1,4 +1,4 @@
-# nnn
+# nnn | NixOS + Niri + Noctalia
 
 A personal NixOS flake configuration for a niri-based Wayland desktop. Built around a scrollable-tiling workflow, a modular file-per-concern structure, and a mostly Tokyo Night-leaning look across the terminal and compositor.
 
@@ -54,7 +54,7 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 
 ```
 modules/
-  configuration.nix   system-level config: users, locale, fish, fonts, cursor theme
+  configuration.nix    system-level config: users, locale, fish, fonts, cursor theme
   hardware.nix         hardware configuration
   niri.nix             compositor: keybinds, outputs, input, cursor
   noctalia.nix         desktop shell package + settings
@@ -77,6 +77,7 @@ modules/
 - **greetd + tuigreet** as a lighter-weight replacement for the current implicit LightDM default, better suited to a niri-only setup.
 - **polish fastfetch**
 - **nvim full IDE configuration**
+- **gaming configurations** for optmized gaming exprience: gamemode, gamescope, openGL, lact, mangoHUD, protonup, lutris, heroic, bottles.
 
 ## Usage
 
