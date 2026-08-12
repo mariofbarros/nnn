@@ -1,0 +1,53 @@
+{ self, inputs, ... }: {
+  flake.nixosModules.kitty = { pkgs, ... }: {
+    environment.systemPackages = [ pkgs.kitty ];
+
+    # Tokyo Night ("night" variant -- matches Noctalia's colorSchemes.predefinedScheme)
+    # + Iosevka Nerd Font. System-wide default: kitty uses this unless
+    # ~/.config/kitty/kitty.conf exists, so per-user overrides still work.
+    environment.etc."xdg/kitty/kitty.conf".text = ''
+      font_family      Iosevka Nerd Font Mono
+      font_size        15.0
+
+      background               #1a1b26
+      foreground                #c0caf5
+      selection_background     #283457
+      selection_foreground      #c0caf5
+      url_color                 #73daca
+      cursor                    #c0caf5
+      cursor_text_color         #1a1b26
+
+      active_tab_background     #7aa2f7
+      active_tab_foreground     #16161e
+      inactive_tab_background   #292e42
+      inactive_tab_foreground   #545c7e
+      tab_bar_background        #15161e
+
+      active_border_color       #7aa2f7
+      inactive_border_color     #292e42
+
+      # normal
+      color0  #15161e
+      color1  #f7768e
+      color2  #9ece6a
+      color3  #e0af68
+      color4  #7aa2f7
+      color5  #bb9af7
+      color6  #7dcfff
+      color7  #a9b1d6
+
+      # bright
+      color8  #414868
+      color9  #ff899d
+      color10 #9fe044
+      color11 #faba4a
+      color12 #8db0ff
+      color13 #c7a9ff
+      color14 #a4daff
+      color15 #c0caf5
+
+      background_opacity   0.90
+      window_padding_width 8
+    '';
+  };
+}
