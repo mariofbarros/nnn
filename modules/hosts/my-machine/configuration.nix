@@ -8,7 +8,7 @@
       self.nixosModules.apps
       self.nixosModules.portals
       self.nixosModules.kitty
-      self.nixosModules.fastfetch
+      self.nixosModules.fetch
       self.nixosModules.theming
       self.nixosModules.starship
     ];
