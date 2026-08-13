@@ -22,6 +22,11 @@
 
     boot.kernelPackages = pkgs.linuxKernel.packagesFor pkgs.cachyosKernels.linux-cachyos-latest;
 
+    programs.nix-ld.enable = true;
+    programs.nix-ld.libraries = with pkgs; [
+      stdenv.cc.cc.lib
+    ];
+
     networking.hostName = "nix-btw";
     networking.networkmanager.enable = true;
     time.timeZone = "America/Sao_Paulo";
