@@ -1,6 +1,7 @@
 # nnn | NixOS + Niri + Noctalia
 
 A personal NixOS flake configuration for a niri-based Wayland desktop. Built around a scrollable-tiling workflow, a modular file-per-concern structure, and a mostly Tokyo Night-leaning look across the terminal and compositor.
+<img width="1918" height="1080" alt="image" src="https://github.com/user-attachments/assets/c4ccdb9a-a6c4-4814-a360-c195bc1fca95" />
 
 ## Overview
 
@@ -25,7 +26,7 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - fish (login shell)
 - kitty (terminal)
 - starship (prompt)
-- fastfetch (system info on shell startup)
+- [fetch](https://github.com/areofyl/fetch) (system info)
 
 **Theming**
 - Tokyo Night palette — kitty, niri's window borders
@@ -62,7 +63,7 @@ modules/
   portals.nix          xdg-desktop-portal setup for screen sharing
   theming.nix          shared GTK/Qt dark theme baseline
   kitty.nix            terminal package + theme
-  fastfetch.nix        fastfetch package + config
+  fetch.nix            fetch package + config
   starship.nix         prompt config
 ```
 
@@ -75,9 +76,8 @@ modules/
 
 - **home-manager**, mainly to close the declarative gap in GTK4/libadwaita and qt6ct theming (both currently need a one-time manual step), and to manage per-user dotfiles like kitty's config directly instead of as a system-wide fallback that can be silently shadowed.
 - **greetd + tuigreet** as a lighter-weight replacement for the current implicit LightDM default, better suited to a niri-only setup.
-- **polish fastfetch**
 - **nvim full IDE configuration**
-- **gaming configurations** for optmized gaming exprience: gamemode, gamescope, openGL, lact, mangoHUD, protonup, lutris, heroic, bottles.
+- **gaming configurations** for optmized gaming experience: gamemode, gamescope, openGL, lact, mangoHUD, protonup, lutris, heroic, bottles.
 
 ## Usage
 
