@@ -10,13 +10,6 @@
       curl
       nmap            # Port scanning/network discovery
       mtr             # Route tracing
-      ripgrep         # Ultra-fast grep replacement
-      fd              # Fast find replacement
-      bat             # cat with syntax highlighting
-      exa             # ls with colors/icons
-      jq              # JSON processing
-      yq              # YAML/JSON/TOML processing
-      csvkit          # CSV manipulation
 
       #UTILS
       kdePackages.dolphin
