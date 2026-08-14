@@ -8,16 +8,13 @@
       configFile = pkgs.writeText "fetch-config" ''
 
         host
-
         os
         kernel
         packages
-
         shell
         terminal
         de
         wm
-
         cpu
         gpu
         memory
