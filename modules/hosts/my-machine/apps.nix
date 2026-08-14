@@ -26,7 +26,7 @@
 
       #DEVELOPMENT
       vim
-      vscode
+      vscodium
       python3
       nodejs
       lua
