@@ -50,7 +50,7 @@
       mangohud           # FPS overlay
       openrgb            # RGB controller (if supported hardware)
       vulkan-tools       # Vulkan validation/debugging
-      openGL
+      mesa
       lact               #GPU Configuration Tool for AMD
 
       #OTHER
