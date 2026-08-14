@@ -28,7 +28,7 @@
       vim
       vscode
       python3
-      nodejs_20
+      nodejs
       npm
       rustup           # Rust toolchain manager
       cargo
