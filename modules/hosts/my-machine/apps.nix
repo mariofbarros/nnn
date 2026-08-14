@@ -14,6 +14,8 @@
       obs-studio
       cmatrix
       python3
+      gcc
+      clang
       chromium
       kdePackages.dolphin
       kdePackages.kio         # file-open-with associations
