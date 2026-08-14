@@ -29,7 +29,8 @@
       vscode
       python3
       nodejs
-      npm
+      lua
+      luajit
       rustup           # Rust toolchain manager
       cargo
       clippy
