@@ -43,7 +43,7 @@
       #GAMING
       gamemode           # Game performance tuning
       gamescope          # Micro-compositor for games
-      protonup
+      protonup-qt
       lutris             # Non-Steam game launcher
       heroic             # Epic Games/GOG launcher
       bottles
