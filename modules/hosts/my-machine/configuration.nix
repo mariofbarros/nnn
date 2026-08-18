@@ -12,6 +12,7 @@
       self.nixosModules.theming
       self.nixosModules.starship
       self.nixosModules.searxng
+      self.nixosModules.defaultApps
     ];
 
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
