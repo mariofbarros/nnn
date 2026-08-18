@@ -1,7 +1,7 @@
 {
   "settingsVersion": 59,
   "bar": {
-    "barType": "simple",
+    "barType": "floating",
     "position": "top",
     "monitors": [
       "HDMI-A-1",

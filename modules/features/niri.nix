@@ -58,8 +58,9 @@
           };
         };
 
-        layout.gaps = 8;
+        layout.gaps = 5;
         layout.focus-ring.active-color = "#7aa2f7"; # Tokyo Night blue, matches kitty
+        layout.focus-ring.width = 2;
 
         binds = let
           # Generates Mod+1.."9" -> focus-workspace N, and Mod+Shift+1.."9" ->
