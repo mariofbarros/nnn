@@ -23,10 +23,13 @@
       obs-studio
       yazi
       btop
+      localsend
 
       #DEVELOPMENT
       vim
       vscodium
+      docker
+      opencode
       python3
       nodejs
       lua
@@ -59,7 +62,6 @@
       discord
       cmatrix
       chromium
-
     ];
   };
 }

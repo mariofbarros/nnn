@@ -55,16 +55,26 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 
 ```
 modules/
-  configuration.nix    system-level config: users, locale, fish, fonts, cursor theme
-  hardware.nix         hardware configuration
-  niri.nix             compositor: keybinds, outputs, input, cursor
-  noctalia.nix         desktop shell package + settings
-  apps.nix             general application packages
-  portals.nix          xdg-desktop-portal setup for screen sharing
-  theming.nix          shared GTK/Qt dark theme baseline
-  kitty.nix            terminal package + theme
-  fetch.nix            fetch package + config
-  starship.nix         prompt config
+  features/            system-level modules (auto-discovered by import-tree)
+    niri.nix           compositor: keybinds, outputs, input, cursor
+    noctalia.nix       desktop shell package + settings
+    portals.nix        xdg-desktop-portal setup for screen sharing
+    theming.nix        GTK/Qt package + session variable baseline
+    fetch.nix          fetch package + fish abbr
+    starship.nix       prompt config
+    searxng.nix        SearXNG service
+  home/                home-manager modules for the mario user
+    default.nix        option declaration + aggregation, stateVersion
+    kitty.nix          terminal config (per-user ~/.config/kitty)
+    theming.nix        gsettings-backed GTK4/libadwaita + Qt theming
+    fetch.nix          fetch config
+    xdg.nix            mimeapps.list defaults
+  hosts/my-machine/    the nix-btw host definition
+    configuration.nix  system-level config: users, locale, fish, fonts, cursor theme
+    hardware.nix       hardware configuration
+    apps.nix           general application packages
+    default-apps.nix   $BROWSER session variable
+    home.nix           home-manager NixOS module wiring
 ```
 
 ## Known issues
@@ -74,10 +84,11 @@ modules/
 
 ## Planned / under consideration
 
-- **home-manager**, mainly to close the declarative gap in GTK4/libadwaita and qt6ct theming (both currently need a one-time manual step), and to manage per-user dotfiles like kitty's config directly instead of as a system-wide fallback that can be silently shadowed.
 - **greetd + tuigreet** as a lighter-weight replacement for the current implicit LightDM default, better suited to a niri-only setup.
 - **nvim full IDE configuration**
 - **gaming configurations** for optmized gaming experience: gamemode, gamescope, openGL, lact, mangoHUD, protonup, lutris, heroic, bottles.
+
+home-manager is now wired in (see `modules/home/` and `modules/hosts/my-machine/home.nix`). Remaining follow-ups: move the fish config (currently system-side, hosting `nrs`/`noctalia-export`) home-side, and relocate user-facing apps from `systemPackages` to `home.packages`.
 
 ## Usage
 

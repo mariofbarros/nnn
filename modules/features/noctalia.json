@@ -65,7 +65,7 @@
           "colorizeIcons": false,
           "hideMode": "hidden",
           "id": "ActiveWindow",
-          "maxWidth": 145,
+          "maxWidth": 300,
           "scrollingMode": "hover",
           "showIcon": true,
           "showText": true,
@@ -304,8 +304,8 @@
     "clockFormat": "hh\\nmm",
     "passwordChars": false,
     "lockScreenMonitors": [],
-    "lockScreenBlur": 0.2,
-    "lockScreenTint": 0.05,
+    "lockScreenBlur": 0.3,
+    "lockScreenTint": 0.1,
     "keybinds": {
       "keyUp": [
         "Up"

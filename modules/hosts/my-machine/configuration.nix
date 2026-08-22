@@ -7,12 +7,12 @@
       self.nixosModules.niri
       self.nixosModules.apps
       self.nixosModules.portals
-      self.nixosModules.kitty
       self.nixosModules.fetch
       self.nixosModules.theming
       self.nixosModules.starship
       self.nixosModules.searxng
       self.nixosModules.defaultApps
+      self.nixosModules.homeManager
     ];
 
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
