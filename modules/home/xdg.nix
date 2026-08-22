@@ -14,5 +14,9 @@
         "x-scheme-handler/unknown" = "librewolf.desktop";
       };
     };
+
+    # Pre-existing ~/.config/mimeapps.list has identical content; allow
+    # home-manager to take it over instead of aborting activation.
+    xdg.configFile."mimeapps.list".force = true;
   };
 }
