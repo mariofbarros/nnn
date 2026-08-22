@@ -50,7 +50,8 @@
         color14 #a4daff
         color15 #c0caf5
 
-        background_opacity   0.90
+        background_opacity   0.5
+        background_blur 1
         window_padding_width 8
       '';
     };
