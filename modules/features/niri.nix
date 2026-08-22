@@ -77,8 +77,6 @@
           # Move focus between columns / windows within a column
           "Mod+Left".focus-column-left = _:{ };
           "Mod+Right".focus-column-right = _:{ };
-          "Mod+Down".focus-window-down = _:{ };
-          "Mod+Up".focus-window-up = _:{ };
 
           # Move the focused column / window itself
           "Mod+Shift+Left".move-column-left = _:{ };
@@ -89,8 +87,8 @@
           # Switch workspaces up/down on the current monitor
           "Mod+U".focus-workspace-down = _:{ };
           "Mod+I".focus-workspace-up = _:{ };
-          "Mod+Shift+U".move-window-to-workspace-down = _:{ };
-          "Mod+Shift+I".move-window-to-workspace-up = _:{ };
+          "Mod+Down".move-window-to-workspace-down = _:{ };
+          "Mod+Up".move-window-to-workspace-up = _:{ };
 
           # Jump straight to a workspace by number (Mod+1 .. Mod+9)
           # and Mod+Shift+1..9 to send the focused window there instead.
