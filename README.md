@@ -50,6 +50,7 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - **A rebuild command that actually checks itself.** `nrs` runs `nixos-rebuild switch` and then compares the registered generation against what's actually running, rather than trusting the exit code — useful because a display-manager restart mid-activation can report success without the system having actually switched over.
 - **A safe noctalia-shell settings export.** `noctalia-export` writes to a temp file first and only copies it into the repo if the export actually succeeded, avoiding a self-truncation bug where redirecting straight onto the tracked file could wipe it before the export ran.
 - **Proper ABNT2 support.** Brazilian keyboard layout configured as separate `layout`/`variant` fields (`br` / `abnt2`) rather than a combined string, in both niri's input config and the console keymap.
+- **Gaming configurations** for an optimized AMD gaming experience: full Vulkan/OpenGL driver stack (radv + 32-bit), Steam's gamescope session, gamemode, gamescope, MangoHud, LACT, protonup, lutris, heroic, bottles, plus gaming-friendly sysctl tunables.
 
 ## Repository structure
 
@@ -63,12 +64,14 @@ modules/
     fetch.nix          fetch package + fish abbr
     starship.nix       prompt config
     searxng.nix        SearXNG service
+    gaming.nix         gaming stack: AMD drivers, Steam/gamescope, gamemode, LACT, sysctl
   home/                home-manager modules for the mario user
     default.nix        option declaration + aggregation, stateVersion
     kitty.nix          terminal config (per-user ~/.config/kitty)
     theming.nix        gsettings-backed GTK4/libadwaita + Qt theming
     fetch.nix          fetch config
     xdg.nix            mimeapps.list defaults
+    gaming.nix         per-user MangoHud overlay + gamemode settings
   hosts/my-machine/    the nix-btw host definition
     configuration.nix  system-level config: users, locale, fish, fonts, cursor theme
     hardware.nix       hardware configuration
@@ -86,7 +89,6 @@ modules/
 
 - **greetd + tuigreet** as a lighter-weight replacement for the current implicit LightDM default, better suited to a niri-only setup.
 - **nvim full IDE configuration**
-- **gaming configurations** for optmized gaming experience: gamemode, gamescope, openGL, lact, mangoHUD, protonup, lutris, heroic, bottles.
 
 home-manager is now wired in (see `modules/home/` and `modules/hosts/my-machine/home.nix`). Remaining follow-ups: move the fish config (currently system-side, hosting `nrs`/`noctalia-export`) home-side, and relocate user-facing apps from `systemPackages` to `home.packages`.
 

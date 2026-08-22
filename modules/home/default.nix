@@ -12,6 +12,7 @@
       self.homeModules.theming
       self.homeModules.fetch
       self.homeModules.xdg
+      self.homeModules.gaming
     ];
 
     home.stateVersion = "26.05";

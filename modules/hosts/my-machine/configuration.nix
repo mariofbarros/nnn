@@ -11,6 +11,7 @@
       self.nixosModules.theming
       self.nixosModules.starship
       self.nixosModules.searxng
+      self.nixosModules.gaming
       self.nixosModules.defaultApps
       self.nixosModules.homeManager
     ];
