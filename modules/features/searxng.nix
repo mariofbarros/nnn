@@ -2,7 +2,18 @@
   flake.nixosModules.searxng = { pkgs, ... }: {
     services.searx = {
       enable = true;
-      package = pkgs.searxng;
+
+      # Ships a Tokyo Night reskin (see ./searxng-tokyo-night.css) appended to
+      # the compiled stylesheets -- same palette as kitty/niri, applied here
+      # via CSS custom-property overrides rather than patching templates.
+      package = pkgs.searxng.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          for f in $out/lib/python3.*/site-packages/searx/static/themes/simple/sxng-ltr.min.css \
+                   $out/lib/python3.*/site-packages/searx/static/themes/simple/sxng-rtl.min.css; do
+            cat ${./searxng-tokyo-night.css} >> "$f"
+          done
+        '';
+      });
 
       redisCreateLocally = true;
 
@@ -18,6 +29,8 @@
           bind_address = "127.0.0.1";
           port = 8888;
         };
+        # Activates :root.theme-dark, the selector our appended CSS targets.
+        ui.theme_args.simple_style = "dark";
       };
     };
   };
