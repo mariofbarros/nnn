@@ -78,10 +78,11 @@ modules/
       searxng-tokyo-night.css
     gaming.nix          gaming stack: AMD drivers, Steam/gamescope, gamemode, LACT, sysctl
     greetd.nix          greetd + tuigreet display manager
-    apps.nix            general application packages
+    apps.nix            rescue/admin CLI tools + bibata-cursors (needed system-wide by greetd)
     default-apps.nix    $BROWSER session variable
   home/                 home-manager modules for the mario user
     default.nix         option declaration + aggregation, stateVersion
+    apps.nix            personal apps + dev tooling (home.packages)
     kitty.nix           terminal config (per-user ~/.config/kitty)
     theming.nix         gsettings-backed GTK4/libadwaita + Qt theming
     fetch.nix           fetch config
@@ -102,10 +103,6 @@ modules/
 
 - **Intermittent freezes**, currently traced to a use-after-unmap race in the amdgpu framebuffer path (`drm_fb_helper_damage_work`). Under investigation — possibly CachyOS-kernel-specific, being narrowed down by comparing against `linuxPackages_latest`.
 - **Rebuilding from inside the graphical session can misbehave.** Certain changes (anything touching users, shells, or PAM) can disrupt `nixos-rebuild switch` partway through when run from inside the active greetd-managed session — the generation gets registered but doesn't actually become the running system. Workaround: rebuild from a TTY (`Ctrl+Alt+F3`), which is what `nrs` is meant to be run from.
-
-## Planned / under consideration
-
-home-manager is now wired in (see `modules/home/` and `modules/hosts/my-machine/home.nix`), and the fish config (hosting `nrs`/`noctalia-export`) has moved home-side (`modules/home/fish.nix`). Remaining follow-up: relocate the rest of the user-facing apps from `systemPackages` to `home.packages`.
 
 ## Usage
 

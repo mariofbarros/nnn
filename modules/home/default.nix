@@ -8,6 +8,7 @@
 
   config.flake.homeModules.default = { pkgs, ... }: {
     imports = [
+      self.homeModules.apps
       self.homeModules.kitty
       self.homeModules.fish
       self.homeModules.nvim
