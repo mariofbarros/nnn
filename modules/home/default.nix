@@ -10,6 +10,7 @@
     imports = [
       self.homeModules.kitty
       self.homeModules.fish
+      self.homeModules.nvim
       self.homeModules.theming
       self.homeModules.fetch
       self.homeModules.xdg
