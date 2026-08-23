@@ -35,6 +35,12 @@
     programs.gamescope = {
       enable = true;
       capSysNice = true;
+      # No -W/-H/-r: omitting them lets gamescope inherit the display's own
+      # native resolution/refresh rate instead of hardcoding one.
+      args = [
+        "--adaptive-sync"     # variable refresh, if the display supports it
+        "--force-grab-cursor" # keeps the mouse captured -- matters more on Wayland
+      ];
     };
 
     # LACT daemon for AMD GPU monitoring/fan control (no overclocking --

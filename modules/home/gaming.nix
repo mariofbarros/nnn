@@ -40,5 +40,14 @@
       start = notify-send "GameMode started"
       end = notify-send "GameMode ended"
     '';
+
+    # Global Proton/DXVK tuning. Steam (and every Proton process it spawns)
+    # inherits these from this same session, so they apply to all games by
+    # default without touching Steam's per-game launch options; override a
+    # specific title there if it needs something different.
+    home.sessionVariables = {
+      RADV_PERFTEST = "gpl";       # Graphics Pipeline Library -- cuts shader-compile stutter on radv (AMD)
+      PROTON_ENABLE_WAYLAND = "1"; # native Wayland Proton (GE-Proton/CachyOS Proton support this)
+    };
   };
 }
