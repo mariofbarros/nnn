@@ -6,8 +6,7 @@
       kdePackages.qt6ct  # lets Qt apps (Dolphin, OBS, VLC) follow a dark palette
     ];
 
-    environment.sessionVariables = {
-      QT_QPA_PLATFORMTHEME = "qt6ct";
-    };
+    # QT_QPA_PLATFORMTHEME is set by home-manager's qt module instead (see
+    # modules/home/theming.nix), which already sets it from platformTheme.name.
   };
 }

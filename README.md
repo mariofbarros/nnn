@@ -90,7 +90,7 @@ modules/
 - **greetd + tuigreet** as a lighter-weight replacement for the current implicit LightDM default, better suited to a niri-only setup.
 - **nvim full IDE configuration**
 
-home-manager is now wired in (see `modules/home/` and `modules/hosts/my-machine/home.nix`). Remaining follow-ups: move the fish config (currently system-side, hosting `nrs`/`noctalia-export`) home-side, and relocate user-facing apps from `systemPackages` to `home.packages`.
+home-manager is now wired in (see `modules/home/` and `modules/hosts/my-machine/home.nix`), and the fish config (hosting `nrs`/`noctalia-export`) has moved home-side (`modules/home/fish.nix`). Remaining follow-up: relocate the rest of the user-facing apps from `systemPackages` to `home.packages`.
 
 ## Usage
 

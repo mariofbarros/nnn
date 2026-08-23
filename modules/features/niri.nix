@@ -1,4 +1,9 @@
-{ self, inputs, ... }: {
+{ self, inputs, ... }:
+let
+  # Shared with modules/hosts/my-machine/configuration.nix's XCURSOR_THEME /
+  # XCURSOR_SIZE session variables -- keep both in sync via this file.
+  cursorTheme = import ../../lib/cursor-theme.nix;
+in {
   flake.nixosModules.niri = { pkgs, lib, ... }: {
     programs.niri = {
       enable = true;
@@ -39,8 +44,8 @@
         input.focus-follows-mouse = _: { props = { max-scroll-amount = "0%"; }; };
 
         cursor = {
-          xcursor-theme = "Bibata-Modern-Classic";
-          xcursor-size = 24;
+          xcursor-theme = cursorTheme.name;
+          xcursor-size = cursorTheme.size;
         };
 
         # Run `niri msg outputs` (inside your niri session) to get the exact

@@ -44,16 +44,16 @@
       love
 
       #GAMING
-      gamemode           # Game performance tuning
-      gamescope          # Micro-compositor for games
+      # gamemode, gamescope, mangohud, and mesa are already pulled in by
+      # programs.gamemode/gamescope, home-manager's programs.mangohud, and
+      # hardware.graphics.extraPackages respectively -- listing them here
+      # would be duplicate installs.
       protonup-qt
       lutris             # Non-Steam game launcher
       heroic             # Epic Games/GOG launcher
       bottles
-      mangohud           # FPS overlay
       openrgb            # RGB controller (if supported hardware)
       vulkan-tools       # Vulkan validation/debugging
-      mesa
       lact               #GPU Configuration Tool for AMD
 
       #OTHER

@@ -1,4 +1,9 @@
-{ self, inputs, ... }: {
+{ self, inputs, ... }:
+let
+  # Shared with modules/features/niri.nix's cursor.xcursor-theme/xcursor-size
+  # -- keep both in sync via this file.
+  cursorTheme = import ../../../lib/cursor-theme.nix;
+in {
 
   flake.nixosModules.myMachineConfiguration = { pkgs, lib, ... }: {
     # import any other modules from here
@@ -60,8 +65,8 @@
     };
 
     environment.sessionVariables = {
-      XCURSOR_THEME = "Bibata-Modern-Classic";
-      XCURSOR_SIZE = "24";
+      XCURSOR_THEME = cursorTheme.name;
+      XCURSOR_SIZE = toString cursorTheme.size;
     };
 
     services.pulseaudio.enable = false;
