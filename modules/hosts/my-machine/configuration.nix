@@ -10,6 +10,7 @@ in {
     imports = [
       self.nixosModules.myMachineHardware
       self.nixosModules.niri
+      self.nixosModules.greetd
       self.nixosModules.apps
       self.nixosModules.portals
       self.nixosModules.fetch

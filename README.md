@@ -20,7 +20,7 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 **Desktop**
 - [niri](https://github.com/YaLTeR/niri) — scrollable-tiling Wayland compositor
 - [noctalia-shell](https://github.com/noctalia-dev/noctalia-shell) — Quickshell-based desktop shell (bar, dock, notifications, OSD, app launcher, lock screen, wallpaper management)
-- LightDM — display manager (NixOS's implicit default; not yet given its own dedicated module)
+- greetd + tuigreet — themed to match, launches niri directly (see `modules/features/greetd.nix`)
 
 **Shell & terminal**
 - fish (login shell)
@@ -29,7 +29,7 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - [fetch](https://github.com/areofyl/fetch) (system info)
 
 **Theming**
-- Tokyo Night palette — kitty, niri's window borders
+- Tokyo Night palette — kitty, niri's window borders, tuigreet, SearXNG's web UI
 - Bibata cursors
 - Iosevka Nerd Font
 - adw-gtk3, Papirus icons, and qt6ct as a shared dark baseline for the GTK/Qt applications
@@ -83,11 +83,10 @@ modules/
 ## Known issues
 
 - **Intermittent freezes**, currently traced to a use-after-unmap race in the amdgpu framebuffer path (`drm_fb_helper_damage_work`). Under investigation — possibly CachyOS-kernel-specific, being narrowed down by comparing against `linuxPackages_latest`.
-- **Rebuilding from inside the graphical session can misbehave.** Certain changes (anything touching users, shells, or PAM) can disrupt `nixos-rebuild switch` partway through when run from inside the active LightDM-managed session — the generation gets registered but doesn't actually become the running system. Workaround: rebuild from a TTY (`Ctrl+Alt+F3`), which is what `nrs` is meant to be run from.
+- **Rebuilding from inside the graphical session can misbehave.** Certain changes (anything touching users, shells, or PAM) can disrupt `nixos-rebuild switch` partway through when run from inside the active greetd-managed session — the generation gets registered but doesn't actually become the running system. Workaround: rebuild from a TTY (`Ctrl+Alt+F3`), which is what `nrs` is meant to be run from.
 
 ## Planned / under consideration
 
-- **greetd + tuigreet** as a lighter-weight replacement for the current implicit LightDM default, better suited to a niri-only setup.
 - **nvim full IDE configuration**
 
 home-manager is now wired in (see `modules/home/` and `modules/hosts/my-machine/home.nix`), and the fish config (hosting `nrs`/`noctalia-export`) has moved home-side (`modules/home/fish.nix`). Remaining follow-up: relocate the rest of the user-facing apps from `systemPackages` to `home.packages`.

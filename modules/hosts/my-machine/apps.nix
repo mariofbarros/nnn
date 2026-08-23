@@ -30,6 +30,7 @@
       vscodium
       docker
       opencode
+      claude-code
       python3
       nodejs
       lua
