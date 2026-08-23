@@ -43,7 +43,7 @@
             # 'state all' dumps {settings, state}; the wrapper feeds settings.json
             # directly from this file, so keep only the flat 'settings' blob.
             nix run .#myNoctalia -- ipc call state all > /tmp/noctalia-state.json
-            and nix run nixpkgs#jq -- .settings /tmp/noctalia-state.json > ./modules/features/noctalia.json
+            and nix run nixpkgs#jq -- .settings /tmp/noctalia-state.json > ./modules/features/noctalia/noctalia.json
             and echo "noctalia.json updated"
           '';
         };

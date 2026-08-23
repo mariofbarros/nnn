@@ -1,4 +1,7 @@
-{ self, inputs, ... }: {
+{ self, inputs, ... }:
+let
+  palette = import ../../lib/palette.nix;
+in {
   flake.homeModules.kitty = { pkgs, ... }: {
     programs.kitty = {
       enable = true;
@@ -13,29 +16,29 @@
       # Options the home-manager module doesn't expose as structured settings
       # (colors, opacity, padding, borders) live here as raw kitty.conf lines.
       extraConfig = ''
-        background               #1a1b26
-        foreground                #c0caf5
-        selection_background     #283457
-        selection_foreground      #c0caf5
-        url_color                 #73daca
-        cursor                    #c0caf5
-        cursor_text_color         #1a1b26
+        background               ${palette.bg}
+        foreground                ${palette.fg}
+        selection_background     ${palette.bg2}
+        selection_foreground      ${palette.fg}
+        url_color                 ${palette.teal}
+        cursor                    ${palette.fg}
+        cursor_text_color         ${palette.bg}
 
-        active_tab_background     #7aa2f7
-        active_tab_foreground     #16161e
-        inactive_tab_background   #292e42
-        inactive_tab_foreground   #545c7e
-        tab_bar_background        #15161e
+        active_tab_background     ${palette.accent}
+        active_tab_foreground     ${palette.bg0}
+        inactive_tab_background   ${palette.bg1}
+        inactive_tab_foreground   ${palette.fgMuted}
+        tab_bar_background        ${palette.black}
 
-        active_border_color       #7aa2f7
-        inactive_border_color     #292e42
+        active_border_color       ${palette.accent}
+        inactive_border_color     ${palette.bg1}
 
         # normal
-        color0  #15161e
+        color0  ${palette.black}
         color1  #f7768e
         color2  #9ece6a
         color3  #e0af68
-        color4  #7aa2f7
+        color4  ${palette.accent}
         color5  #bb9af7
         color6  #7dcfff
         color7  #a9b1d6
@@ -48,7 +51,7 @@
         color12 #8db0ff
         color13 #c7a9ff
         color14 #a4daff
-        color15 #c0caf5
+        color15 ${palette.fg}
 
         background_opacity   0.5
         background_blur 1

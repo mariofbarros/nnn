@@ -79,10 +79,15 @@ in {
       pulse.enable = true;
     };
 
+    # Daemon + CLI (already provides the `docker` package system-wide, no
+    # separate entry needed in apps.nix); mario needs the "docker" group
+    # below to talk to it without sudo.
+    virtualisation.docker.enable = true;
+
     users.users.mario = {
       isNormalUser = true;
       description = "mario";
-      extraGroups = [ "networkmanager" "wheel" "plugdev" ];
+      extraGroups = [ "networkmanager" "wheel" "plugdev" "docker" ];
       packages = with pkgs; [ ];
       shell = pkgs.fish;
     };

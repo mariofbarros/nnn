@@ -329,7 +329,7 @@
     ]
   },
   "general": {
-    "avatarImage": "/home/mario/nnn/profile/pp.png",
+    "avatarImage": "/home/mario/nnn/assets/profile/pp.png",
     "dimmerOpacity": 0.2,
     "showScreenCorners": false,
     "forceBlackScreenCorners": false,
@@ -441,7 +441,7 @@
   "wallpaper": {
     "enabled": true,
     "overviewEnabled": false,
-    "directory": "/home/mario/nnn/walls",
+    "directory": "/home/mario/nnn/assets/walls",
     "monitorDirectories": [],
     "enableMultiMonitorDirectories": false,
     "showHiddenFiles": false,

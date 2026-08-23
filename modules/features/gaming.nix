@@ -41,6 +41,14 @@
     # hardware.amdgpu.overdrive deliberately left disabled).
     services.lact.enable = true;
 
+    # OpenRGB server: runs as a root systemd service and ships its own udev
+    # rules for USB RGB devices, so the client (this same option already adds
+    # the package to systemPackages -- no separate entry needed in apps.nix)
+    # doesn't need any special group membership, just to reach the local
+    # server. motherboard = "amd" adds i2c-piix4 for motherboard RGB headers.
+    services.hardware.openrgb.enable = true;
+    services.hardware.openrgb.motherboard = "amd";
+
     # Kernel/VM tunables that matter for gaming:
     # - vm.max_map_count: DXVK/VKD3D-proton map far more mmaps than the default
     # - vm.swappiness: avoid swapping out hot pages during gameplay

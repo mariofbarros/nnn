@@ -26,9 +26,10 @@
       localsend
 
       #DEVELOPMENT
+      # docker's CLI comes from virtualisation.docker.enable (configuration.nix)
+      # -- listing it here too would be a duplicate install.
       vim
       vscodium
-      docker
       opencode
       claude-code
       python3
@@ -45,17 +46,16 @@
       love
 
       #GAMING
-      # gamemode, gamescope, mangohud, and mesa are already pulled in by
-      # programs.gamemode/gamescope, home-manager's programs.mangohud, and
-      # hardware.graphics.extraPackages respectively -- listing them here
-      # would be duplicate installs.
+      # gamemode, gamescope, mangohud, mesa, openrgb, and lact are already
+      # pulled in by programs.gamemode/gamescope, home-manager's
+      # programs.mangohud, hardware.graphics.extraPackages,
+      # services.hardware.openrgb, and services.lact respectively -- listing
+      # them here would be duplicate installs.
       protonup-qt
       lutris             # Non-Steam game launcher
       heroic             # Epic Games/GOG launcher
       bottles
-      openrgb            # RGB controller (if supported hardware)
       vulkan-tools       # Vulkan validation/debugging
-      lact               #GPU Configuration Tool for AMD
 
       #OTHER
       librewolf

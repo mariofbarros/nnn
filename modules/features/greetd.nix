@@ -11,19 +11,19 @@
 
       settings.default_session.command =
         let
-          # Tokyo Night, reused verbatim from modules/home/kitty.nix and the
-          # niri focus-ring color in modules/features/niri.nix -- same accent
+          # Tokyo Night, from the shared lib/palette.nix palette -- same accent
           # blue as the terminal border and window focus ring, same muted
           # violet-gray as secondary text, same teal reserved for a distinct
           # interactive value (kitty's url_color; here, typed input).
+          colors = import ../../lib/palette.nix;
           theme = lib.concatStringsSep ";" [
-            "border=#7aa2f7"
-            "container=#292e42"
-            "text=#c0caf5"
-            "prompt=#7aa2f7"
-            "input=#73daca"
-            "action=#545c7e"
-            "button=#7aa2f7"
+            "border=${colors.accent}"
+            "container=${colors.bg1}"
+            "text=${colors.fg}"
+            "prompt=${colors.accent}"
+            "input=${colors.teal}"
+            "action=${colors.fgMuted}"
+            "button=${colors.accent}"
           ];
         in
         lib.concatStringsSep " " [

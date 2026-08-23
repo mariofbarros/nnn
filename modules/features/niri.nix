@@ -3,6 +3,7 @@ let
   # Shared with modules/hosts/my-machine/configuration.nix's XCURSOR_THEME /
   # XCURSOR_SIZE session variables -- keep both in sync via this file.
   cursorTheme = import ../../lib/cursor-theme.nix;
+  palette = import ../../lib/palette.nix;
 in {
   flake.nixosModules.niri = { pkgs, lib, ... }: {
     programs.niri = {
@@ -64,7 +65,7 @@ in {
         };
 
         layout.gaps = 5;
-        layout.focus-ring.active-color = "#7aa2f7"; # Tokyo Night blue, matches kitty
+        layout.focus-ring.active-color = palette.accent; # Tokyo Night blue, matches kitty
         layout.focus-ring.width = 2;
 
         binds = let
