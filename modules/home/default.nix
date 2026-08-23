@@ -9,6 +9,7 @@
   config.flake.homeModules.default = { pkgs, ... }: {
     imports = [
       self.homeModules.kitty
+      self.homeModules.fish
       self.homeModules.theming
       self.homeModules.fetch
       self.homeModules.xdg
