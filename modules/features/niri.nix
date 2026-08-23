@@ -68,6 +68,26 @@ in {
         layout.focus-ring.active-color = palette.accent; # Tokyo Night blue, matches kitty
         layout.focus-ring.width = 2;
 
+        # Send games to DP-3 (the 144 Hz Acer) and open them fullscreen,
+        # rather than letting them land on whichever output happens to be
+        # focused. niri OR's the `matches` entries: any one hit applies the
+        # rule. Note these are regexes, so they anchor with ^.
+        window-rules = [
+          {
+            matches = [
+              # Steam sets app-id "steam_app_<appid>" on the game window
+              # (both native and Proton titles). Anchored so it can't also
+              # catch the Steam client itself, whose app-id is bare "steam".
+              { app-id = "^steam_app_"; }
+              # A game run through gamescope is one nested gamescope window,
+              # so the game's own app-id is never visible to niri.
+              { app-id = "^gamescope$"; }
+            ];
+            open-on-output = "DP-3";
+            open-fullscreen = true;
+          }
+        ];
+
         binds = let
           # Generates Mod+1.."9" -> focus-workspace N, and Mod+Shift+1.."9" ->
           # move-window-to-workspace N, instead of writing out 18 lines by hand.
