@@ -1,5 +1,9 @@
 { self, inputs, ... }: {
   flake.homeModules.fish = { pkgs, ... }: {
+    # Pre-existing ~/.config/fish/config.fish (fish's stock template) would be
+    # clobbered by the generated config; let home-manager take it over.
+    xdg.configFile."fish/config.fish".force = true;
+
     programs.fish = {
       enable = true;
 
@@ -36,8 +40,10 @@
           description = "Export current noctalia-shell settings to noctalia.json";
           body = ''
             # Must be run from the flake root (uses the relative ./modules path below).
+            # 'state all' dumps {settings, state}; the wrapper feeds settings.json
+            # directly from this file, so keep only the flat 'settings' blob.
             nix run .#myNoctalia -- ipc call state all > /tmp/noctalia-state.json
-            and cp /tmp/noctalia-state.json ./modules/features/noctalia.json
+            and nix run nixpkgs#jq -- .settings /tmp/noctalia-state.json > ./modules/features/noctalia.json
             and echo "noctalia.json updated"
           '';
         };

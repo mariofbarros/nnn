@@ -711,9 +711,7 @@
     "enabled": true,
     "enableMarkdown": false,
     "density": "default",
-    "monitors": [
-      "DP-3"
-    ],
+    "monitors": [],
     "location": "top_right",
     "overlayLayer": true,
     "backgroundOpacity": 1,
