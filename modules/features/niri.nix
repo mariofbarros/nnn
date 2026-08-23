@@ -58,6 +58,13 @@ in {
         outputs = {
           "DP-3" = {
             position = _: { props = { x = 0; y = 0; }; };
+            # VRR on the 144 Hz Acer, but on-demand rather than always-on:
+            # niri only engages it while a window whose rule opts in with
+            # `variable-refresh-rate true` is visible here (see the game
+            # window-rule below). Keeps the desktop at a fixed refresh,
+            # since VRR at idle desktop framerates is what tends to cause
+            # brightness flicker on VA panels.
+            variable-refresh-rate = _: { props = { on-demand = true; }; };
           };
           "HDMI-A-1" = {
             position = _: { props = { x = 1920; y = 0; }; };
@@ -85,6 +92,10 @@ in {
             ];
             open-on-output = "DP-3";
             open-fullscreen = true;
+            # Required for DP-3's on-demand VRR to actually kick in -- niri
+            # gates that on a visible window whose rule sets this true, so
+            # without it the output setting alone would never engage.
+            variable-refresh-rate = true;
           }
         ];
 
