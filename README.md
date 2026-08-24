@@ -50,7 +50,7 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - **A rebuild command that actually checks itself.** `nrs` runs `nixos-rebuild switch` and then compares the registered generation against what's actually running, rather than trusting the exit code — useful because a display-manager restart mid-activation can report success without the system having actually switched over.
 - **A safe noctalia-shell settings export.** `noctalia-export` writes to a temp file first and only copies it into the repo if the export actually succeeded, avoiding a self-truncation bug where redirecting straight onto the tracked file could wipe it before the export ran.
 - **Proper ABNT2 support.** Brazilian keyboard layout configured as separate `layout`/`variant` fields (`br` / `abnt2`) rather than a combined string, in both niri's input config and the console keymap.
-- **Gaming configurations** for an optimized AMD gaming experience: full Vulkan/OpenGL driver stack (radv + 32-bit), Steam's gamescope session, gamemode, gamescope, MangoHud, LACT, protonup, lutris, heroic, bottles, plus gaming-friendly sysctl tunables. Proton tuning and window placement are declarative; the three overlay/wrapper tools stay per-game by design — see [Steam launch options](#steam-launch-options).
+- **Gaming configurations** for an optimized AMD gaming experience: full Vulkan/OpenGL driver stack (radv + 32-bit), Steam's gamescope session, gamemode, gamescope, MangoHud, LACT, protonup, lutris, heroic, bottles, plus gaming-friendly sysctl tunables. Proton tuning and window placement are declarative; the three overlay/wrapper tools stay per-game by design — see [Steam launch options](docs/steam-launch-options.md).
 - **Centralized theming constants.** Cursor theme and the Tokyo Night color palette each live in one file under `lib/` (`cursor-theme.nix`, `palette.nix`) instead of being hand-copied across every consumer — kitty, niri, and greetd all import the same `lib/palette.nix` values, so the colors can only drift where a file (like the static SearXNG CSS) genuinely can't consume Nix values directly.
 
 ## Repository structure
@@ -107,67 +107,10 @@ modules/
 ## Disaster recovery
 
 If the SSD dies, a fresh machine can be brought up from this repo with a
-single command, using [disko](https://github.com/nix-community/disko) +
-`disko-install`, after booting a NixOS minimal/graphical ISO on the new
-hardware. The partition layout is declared in
-`modules/hosts/my-machine/disko.nix`.
-
-1. **Boot the NixOS installer ISO** on the new hardware; only `nix` +
-   network are required.
-
-2. **Get online.** Ethernet works out of the box; for Wi-Fi use `nmtui`
-   or `nmcli device wifi connect <SSID> --ask`.
-
-3. **Run the recovery script — the single command:**
-   ```
-   sudo nix run 'github:mariofbarros/nnn#recover'
-   ```
-   It lists candidate disks under `/dev/disk/by-id/` (never the unstable
-   `/dev/sdX`/`/dev/nvme0n1` names), makes you pick one, and requires
-   typing the chosen path back exactly before doing anything — a wrong
-   pick here erases a disk, so there's no bare y/n. Once confirmed, it
-   runs `disko-install` for you: partitions and formats per `disko.nix`
-   (GPT: 1G vfat `/boot`, 34G swap, ext4 `/` on the remainder), installs
-   NixOS from the flake, and registers an EFI boot entry. Source:
-   `modules/hosts/my-machine/recover.nix`.
-
-   Equivalent by hand, if you'd rather skip the script and pass the disk
-   directly:
-   ```
-   sudo nix run 'github:nix-community/disko/latest#disko-install' -- \
-     --write-efi-boot-entries \
-     --flake 'github:mariofbarros/nnn#nix-btw' \
-     --disk main /dev/disk/by-id/<disk-id>
-   ```
-
-4. **Reboot** and remove the install media:
-   ```
-   sudo reboot
-   ```
-
-5. **Recreate the SearXNG secret file.** It's intentionally not tracked
-   in the repo (see `modules/features/searxng/searxng.nix`), so it must
-   be regenerated once after every fresh install:
-   ```
-   sudo install -d -o searx -g searx -m 700 /var/lib/searxng
-   echo "SEARX_SECRET_KEY=$(openssl rand -hex 32)" | sudo tee /var/lib/searxng/secret.env
-   sudo chown searx:searx /var/lib/searxng/secret.env
-   sudo chmod 600 /var/lib/searxng/secret.env
-   sudo systemctl restart searx
-   ```
-   Note: `environmentFile` only feeds systemd's `EnvironmentFile=` for the
-   unit — it doesn't wire itself into SearXNG's `secret_key` unless
-   `services.searx.settings.server.secret_key` is also set to
-   `"$SEARX_SECRET_KEY"`, which this repo doesn't currently do. Low
-   priority given SearXNG is bound to `127.0.0.1` only, but worth fixing
-   in `searxng.nix` separately.
-
-6. **Log in as `mario`.** home-manager state rebuilds from the same
-   flake on first activation.
-
-If `disko-install` ever breaks on a future nixpkgs release, the fallback
-is the traditional manual path: partition by hand, `nixos-generate-config`,
-then `nixos-install --flake .#nix-btw`.
+single command via disko + disko-install. See
+[docs/disaster-recovery.md](docs/disaster-recovery.md) for the full
+runbook — **read the warning disclaimer there before running anything**,
+it wipes a disk.
 
 ## Usage
 
@@ -176,40 +119,9 @@ nrs               # rebuild and switch, with a real check that it applied
 noctalia-export   # sync noctalia-shell's live settings back into the repo
 ```
 
-### Steam launch options
-
-Part of the gaming setup is declarative and part of it isn't, which is easy to
-misremember. What applies on its own:
-
-- **Proton tuning** — `RADV_PERFTEST=gpl` and `PROTON_ENABLE_WAYLAND=1` are set in
-  `home.sessionVariables` (`modules/home/gaming.nix`), so Steam and every Proton
-  child process inherit them.
-- **Window placement** — the niri rule in `modules/features/niri.nix` opens games
-  fullscreen on DP-3 and opts them into that output's on-demand VRR. It matches
-  both `steam_app_*` (Steam's per-title app-id) and `gamescope`.
-
-What still needs a per-game launch option, because all three are opt-in wrappers
-by design:
-
-- **MangoHud** — `enableSessionWide` is deliberately off, so `MANGOHUD=1` is never
-  set session-wide (it would overlay every Vulkan/OpenGL app, not just games).
-- **GameMode** — the daemon only acts when a process asks it to, and almost no
-  game does that natively.
-- **gamescope** — its flags are baked into a wrapper around the binary, but
-  gamescope still has to actually be invoked.
-
-```
-gamemoderun mangohud %command%                    # the usual one
-gamescope -- gamemoderun mangohud %command%       # ...routed through gamescope
-```
-
-`--adaptive-sync` and `--force-grab-cursor` come from `programs.gamescope.args`
-and are already in the wrapper, so there's no need to repeat them above.
-
-Note that `--adaptive-sync` mainly matters in Steam's gamescope *session*, where
-gamescope drives the display directly. Nested inside niri it's an ordinary
-Wayland client and niri's own on-demand VRR governs refresh — which is why the
-window rule matches `^gamescope$` as well, so VRR engages on either path.
+See [docs/steam-launch-options.md](docs/steam-launch-options.md) for what
+Steam/Proton config is declarative versus what still needs a per-game
+launch option.
 
 #### Special Thanks
 
