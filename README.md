@@ -104,6 +104,70 @@ modules/
 - **Intermittent freezes**, currently traced to a use-after-unmap race in the amdgpu framebuffer path (`drm_fb_helper_damage_work`). Under investigation — possibly CachyOS-kernel-specific, being narrowed down by comparing against `linuxPackages_latest`.
 - **Rebuilding from inside the graphical session can misbehave.** Certain changes (anything touching users, shells, or PAM) can disrupt `nixos-rebuild switch` partway through when run from inside the active greetd-managed session — the generation gets registered but doesn't actually become the running system. Workaround: rebuild from a TTY (`Ctrl+Alt+F3`), which is what `nrs` is meant to be run from.
 
+## Disaster recovery
+
+If the SSD dies, a fresh machine can be brought up from this repo with a
+single command, using [disko](https://github.com/nix-community/disko) +
+`disko-install`, after booting a NixOS minimal/graphical ISO on the new
+hardware. The partition layout is declared in
+`modules/hosts/my-machine/disko.nix`.
+
+1. **Boot the NixOS installer ISO** on the new hardware; only `nix` +
+   network are required.
+
+2. **Get online.** Ethernet works out of the box; for Wi-Fi use `nmtui`
+   or `nmcli device wifi connect <SSID> --ask`.
+
+3. **Identify the target disk's stable path** — do NOT use `/dev/sdX` or
+   `/dev/nvme0n1` (these can shift), use the by-id path instead:
+   ```
+   ls -la /dev/disk/by-id/
+   ```
+   Pick the real internal disk's `nvme-<model>_<serial>` entry, not a
+   `-partN` or `-eui.*` alias.
+
+4. **Run the installer — the single command:**
+   ```
+   sudo nix run 'github:nix-community/disko/latest#disko-install' -- \
+     --write-efi-boot-entries \
+     --flake 'github:mariofbarros/nnn#nix-btw' \
+     --disk main /dev/disk/by-id/<new-disk-id-from-step-3>
+   ```
+   This partitions and formats the disk per `disko.nix` (GPT: 1G vfat
+   `/boot`, 34G swap, ext4 `/` on the remainder), installs NixOS from the
+   flake, and registers an EFI boot entry. `--disk main <path>` overrides
+   the placeholder device in `disko.nix` for the whole build, so it works
+   regardless of what disk `disko.nix` currently points at.
+
+5. **Reboot** and remove the install media:
+   ```
+   sudo reboot
+   ```
+
+6. **Recreate the SearXNG secret file.** It's intentionally not tracked
+   in the repo (see `modules/features/searxng/searxng.nix`), so it must
+   be regenerated once after every fresh install:
+   ```
+   sudo install -d -o searx -g searx -m 700 /var/lib/searxng
+   echo "SEARX_SECRET_KEY=$(openssl rand -hex 32)" | sudo tee /var/lib/searxng/secret.env
+   sudo chown searx:searx /var/lib/searxng/secret.env
+   sudo chmod 600 /var/lib/searxng/secret.env
+   sudo systemctl restart searx
+   ```
+   Note: `environmentFile` only feeds systemd's `EnvironmentFile=` for the
+   unit — it doesn't wire itself into SearXNG's `secret_key` unless
+   `services.searx.settings.server.secret_key` is also set to
+   `"$SEARX_SECRET_KEY"`, which this repo doesn't currently do. Low
+   priority given SearXNG is bound to `127.0.0.1` only, but worth fixing
+   in `searxng.nix` separately.
+
+7. **Log in as `mario`.** home-manager state rebuilds from the same
+   flake on first activation.
+
+If `disko-install` ever breaks on a future nixpkgs release, the fallback
+is the traditional manual path: partition by hand, `nixos-generate-config`,
+then `nixos-install --flake .#nix-btw`.
+
 ## Usage
 
 ```fish

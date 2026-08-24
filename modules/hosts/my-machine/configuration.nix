@@ -9,6 +9,7 @@ in {
     # import any other modules from here
     imports = [
       self.nixosModules.myMachineHardware
+      self.nixosModules.diskoConfig
       self.nixosModules.niri
       self.nixosModules.greetd
       self.nixosModules.apps
