@@ -118,33 +118,34 @@ hardware. The partition layout is declared in
 2. **Get online.** Ethernet works out of the box; for Wi-Fi use `nmtui`
    or `nmcli device wifi connect <SSID> --ask`.
 
-3. **Identify the target disk's stable path** — do NOT use `/dev/sdX` or
-   `/dev/nvme0n1` (these can shift), use the by-id path instead:
+3. **Run the recovery script — the single command:**
    ```
-   ls -la /dev/disk/by-id/
+   sudo nix run 'github:mariofbarros/nnn#recover'
    ```
-   Pick the real internal disk's `nvme-<model>_<serial>` entry, not a
-   `-partN` or `-eui.*` alias.
+   It lists candidate disks under `/dev/disk/by-id/` (never the unstable
+   `/dev/sdX`/`/dev/nvme0n1` names), makes you pick one, and requires
+   typing the chosen path back exactly before doing anything — a wrong
+   pick here erases a disk, so there's no bare y/n. Once confirmed, it
+   runs `disko-install` for you: partitions and formats per `disko.nix`
+   (GPT: 1G vfat `/boot`, 34G swap, ext4 `/` on the remainder), installs
+   NixOS from the flake, and registers an EFI boot entry. Source:
+   `modules/hosts/my-machine/recover.nix`.
 
-4. **Run the installer — the single command:**
+   Equivalent by hand, if you'd rather skip the script and pass the disk
+   directly:
    ```
    sudo nix run 'github:nix-community/disko/latest#disko-install' -- \
      --write-efi-boot-entries \
      --flake 'github:mariofbarros/nnn#nix-btw' \
-     --disk main /dev/disk/by-id/<new-disk-id-from-step-3>
+     --disk main /dev/disk/by-id/<disk-id>
    ```
-   This partitions and formats the disk per `disko.nix` (GPT: 1G vfat
-   `/boot`, 34G swap, ext4 `/` on the remainder), installs NixOS from the
-   flake, and registers an EFI boot entry. `--disk main <path>` overrides
-   the placeholder device in `disko.nix` for the whole build, so it works
-   regardless of what disk `disko.nix` currently points at.
 
-5. **Reboot** and remove the install media:
+4. **Reboot** and remove the install media:
    ```
    sudo reboot
    ```
 
-6. **Recreate the SearXNG secret file.** It's intentionally not tracked
+5. **Recreate the SearXNG secret file.** It's intentionally not tracked
    in the repo (see `modules/features/searxng/searxng.nix`), so it must
    be regenerated once after every fresh install:
    ```
@@ -161,7 +162,7 @@ hardware. The partition layout is declared in
    priority given SearXNG is bound to `127.0.0.1` only, but worth fixing
    in `searxng.nix` separately.
 
-7. **Log in as `mario`.** home-manager state rebuilds from the same
+6. **Log in as `mario`.** home-manager state rebuilds from the same
    flake on first activation.
 
 If `disko-install` ever breaks on a future nixpkgs release, the fallback
