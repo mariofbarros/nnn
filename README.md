@@ -7,8 +7,6 @@ A personal NixOS flake configuration for a niri-based Wayland desktop. Built aro
 
 - [docs/nx.md](docs/nx.md) — the `nx` fish CLI: what it wraps, what was
   changed from upstream, how it's wired in
-- [docs/disaster-recovery.md](docs/disaster-recovery.md) — rebuilding a
-  fresh machine from this repo via disko + disko-install
 - [docs/steam-launch-options.md](docs/steam-launch-options.md) — what
   Steam/Proton config is declarative versus per-game
 
@@ -117,14 +115,6 @@ modules/
 
 - **Intermittent freezes**, currently traced to a use-after-unmap race in the amdgpu framebuffer path (`drm_fb_helper_damage_work`). Under investigation — possibly CachyOS-kernel-specific, being narrowed down by comparing against `linuxPackages_latest`.
 - **Rebuilding from inside the graphical session can misbehave.** Certain changes (anything touching users, shells, or PAM) can disrupt `nixos-rebuild switch` partway through when run from inside the active greetd-managed session — the generation gets registered but doesn't actually become the running system. Workaround: rebuild from a TTY (`Ctrl+Alt+F3`), which is what `nx switch` is meant to be run from.
-
-## Disaster recovery
-
-If the SSD dies, a fresh machine can be brought up from this repo with a
-single command via disko + disko-install. See
-[docs/disaster-recovery.md](docs/disaster-recovery.md) for the full
-runbook — **read the warning disclaimer there before running anything**,
-it wipes a disk.
 
 ## Usage
 
