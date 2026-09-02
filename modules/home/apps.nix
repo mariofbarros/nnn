@@ -14,7 +14,6 @@
       obs-studio
       yazi
       btop
-      localsend
 
       #DEVELOPMENT
       vscodium
