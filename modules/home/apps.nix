@@ -41,7 +41,6 @@
       # genuinely lose to gcc's cpp. clang/clang++ themselves don't
       # collide, only the bare `cpp` name does.
       (lib.setPrio 20 clang)
-      love
 
       #GAMING
       protonup-qt
