@@ -54,6 +54,7 @@
       discord
       cmatrix
       chromium
+      love
     ];
   };
 }
