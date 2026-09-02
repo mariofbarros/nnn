@@ -3,6 +3,15 @@
 A personal NixOS flake configuration for a niri-based Wayland desktop. Built around a scrollable-tiling workflow, a modular file-per-concern structure, and a mostly Tokyo Night-leaning look across the terminal and compositor.
 <img width="1918" height="1080" alt="image" src="https://github.com/user-attachments/assets/c4ccdb9a-a6c4-4814-a360-c195bc1fca95" />
 
+## Documentation
+
+- [docs/nx.md](docs/nx.md) — the `nx` fish CLI: what it wraps, what was
+  changed from upstream, how it's wired in
+- [docs/disaster-recovery.md](docs/disaster-recovery.md) — rebuilding a
+  fresh machine from this repo via disko + disko-install
+- [docs/steam-launch-options.md](docs/steam-launch-options.md) — what
+  Steam/Proton config is declarative versus per-game
+
 ## Overview
 
 This repo defines a full NixOS system (`nix-btw`) from a single flake, using [flake-parts](https://flake.parts/) and [import-tree](https://github.com/vic/import-tree) so that every concern — the compositor, the shell, individual applications, theming — lives in its own file under `modules/` with no manual import list to maintain. Window management and the desktop shell are wrapped declaratively with [nix-wrapper-modules](https://github.com/BirdeeHub/nix-wrapper-modules), which turns plain Nix attribute sets into the native config formats (KDL for niri, JSON for noctalia-shell) at build time.
@@ -92,9 +101,9 @@ modules/
     nvim/               neovim: home-manager module + LazyVim-style config
       nvim.nix
       config/           init.lua, lua/, stylua.toml (symlinked to ~/.config/nvim)
-    nx/                 nx fish CLI (deploy/switch/install/search/etc.)
+    nx/                 nx fish CLI (deploy/switch/install/search/etc.);
+                         see docs/nx.md
       default.nix       flake.homeModules.nx entry point
-      README.md         what's vendored from upstream, what's changed, why
       _impl/            cmd-*/helpers-*/dispatcher — not auto-discovered
                          by import-tree (path contains "/_")
   hosts/my-machine/     the nix-btw host definition
@@ -120,7 +129,7 @@ it wipes a disk.
 ## Usage
 
 ```fish
-nx --help         # deploy/switch/update/install/search/etc. — see modules/home/nx/
+nx --help         # deploy/switch/update/install/search/etc. — see docs/nx.md
 nx switch         # rebuild and switch, with a real check that it applied
 nx noctalia-export  # sync noctalia-shell's live settings back into the repo
 ```
@@ -134,4 +143,4 @@ launch option.
 [tony](https://www.youtube.com/@tony-btw),
 [Vimjoyer](https://www.youtube.com/@vimjoyer),
 [Lunobe/Nx](https://github.com/Lunobe/Nx) (the `nx` fish CLI is vendored
-from here, see `modules/home/nx/README.md`)
+from here, see [docs/nx.md](docs/nx.md))

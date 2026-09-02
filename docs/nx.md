@@ -1,9 +1,9 @@
 # nx
 
-`nx` is a fish CLI, exposed as `flake.homeModules.nx`, that wraps this
-repo's day-to-day flake workflow into one command: `nx <subcommand>`. Run
-`nx --help` for full docs on every subcommand, or `nx -h` for a one-line
-summary of each.
+`nx` is a fish CLI, exposed as `flake.homeModules.nx` from
+`modules/home/nx/`, that wraps this repo's day-to-day flake workflow into
+one command: `nx <subcommand>`. Run `nx --help` for full docs on every
+subcommand, or `nx -h` for a one-line summary of each.
 
 Vendored and trimmed from [Lunobe/Nx](https://github.com/Lunobe/Nx) —
 copied into this repo (rather than pulled in as a flake input) since it's
@@ -22,14 +22,16 @@ much: "I don't know how this will work on your machine."
   repo's packages live in `modules/home/apps.nix`, nested one level
   deeper (`flake.homeModules.apps = { pkgs, lib, ... }: { home.packages =
   ... }`), so the bounds-detection and install/uninstall patterns in
-  `_impl/helpers-config.nix` and `_impl/cmd-packages.nix` use 4/6-space
-  indent instead of upstream's 2/4.
+  `modules/home/nx/_impl/helpers-config.nix` and
+  `modules/home/nx/_impl/cmd-packages.nix` use 4/6-space indent instead of
+  upstream's 2/4.
 - **No package-list sorting.** Upstream's `nx format` starts by
   alphabetically sorting the package list. This repo's list is grouped
   under `#UTILS`/`#DEVELOPMENT`/`#GAMING`/`#OTHER` comments, which a blind
   sort would scramble (comment lines would all float to the top of the
-  block). Dropped from `_impl/cmd-format.nix`; `nx list` still filters out
-  blank/comment lines so its output stays just the package names.
+  block). Dropped from `modules/home/nx/_impl/cmd-format.nix`; `nx list`
+  still filters out blank/comment lines so its output stays just the
+  package names.
   Re-ordering within a category, if wanted, is still manual.
 - **No `nix-index-database` comma shorthand.** Upstream uses `, jq` (via
   `programs.nix-index-database.comma.enable`, not an input here) in
@@ -40,9 +42,10 @@ much: "I don't know how this will work on your machine."
   Ported from this repo's former standalone `nrs`/`noctalia-export` fish
   functions (previously in `modules/home/fish.nix`) into nx's
   dispatcher/style — same `__nx_stage`/`__nx_ok`/`__nx_fail`/`__nx_warn`
-  helpers, same `_impl/cmd-*.nix` structure, wired into the same help
-  text/completions. `switch` stays deliberately lighter than `deploy` (no
-  git staging/commit, no flake check, no scratch-dir build/rollback) —
+  helpers, same `_impl/cmd-*.nix` structure (see Layout below), wired into
+  the same help text/completions. `switch` stays deliberately lighter than
+  `deploy` (no git staging/commit, no flake check, no scratch-dir
+  build/rollback) —
   it's for iterating locally when you already trust what's about to be
   built. `noctalia-export` also gained a real fix while being ported: the
   original redirected `jq`'s output straight onto the tracked
@@ -60,8 +63,9 @@ the user's home config via `self.homeModules.nx` in
 
 ## Layout
 
-`default.nix` is the only file directly discovered by import-tree; the
-rest lives under `_impl/` (path containing `/_`, which import-tree's
-default filter skips) since those files are home-manager modules that
-take `repoDir`/`hostName` as module arguments — not flake-parts modules —
-and would error if import-tree tried to import them as such.
+`modules/home/nx/default.nix` is the only file directly discovered by
+import-tree; the rest lives under `modules/home/nx/_impl/` (path
+containing `/_`, which import-tree's default filter skips) since those
+files are home-manager modules that take `repoDir`/`hostName` as module
+arguments — not flake-parts modules — and would error if import-tree
+tried to import them as such.

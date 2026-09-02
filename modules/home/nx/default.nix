@@ -5,7 +5,7 @@
 }: {
   # nx — fish CLI for managing this flake (build/deploy/update/packages),
   # vendored and trimmed from https://github.com/Lunobe/Nx for this repo's
-  # layout. See modules/home/nx/README.md for what was changed and why.
+  # layout. See docs/nx.md for what was changed and why.
   #
   # Implementation files live under _impl/ (not directly here) so
   # import-tree's directory walk skips them (it ignores any path
