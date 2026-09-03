@@ -1,7 +1,8 @@
 # nnn | NixOS + Niri + Noctalia
 
 A personal NixOS flake configuration for a niri-based Wayland desktop. Built around a scrollable-tiling workflow, a modular file-per-concern structure, and a mostly Tokyo Night-leaning look across the terminal and compositor.
-<img width="1918" height="1080" alt="image" src="https://github.com/user-attachments/assets/c4ccdb9a-a6c4-4814-a360-c195bc1fca95" />
+<img width="1917" height="1075" alt="image" src="https://github.com/user-attachments/assets/9062f4f3-0431-42d2-a3bb-48eaf4d6849b" />
+
 
 ## Documentation
 
