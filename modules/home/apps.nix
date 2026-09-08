@@ -35,6 +35,7 @@
       chromium
       love
       
+      docker
     ];
   };
 }
