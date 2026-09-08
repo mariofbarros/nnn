@@ -71,7 +71,7 @@ in {
           };
         };
 
-        layout.gaps = 5;
+        layout.gaps = 8;
         layout.focus-ring.active-color = palette.accent; # Tokyo Night blue, matches kitty
         layout.focus-ring.width = 2;
 
@@ -80,6 +80,12 @@ in {
         # focused. niri OR's the `matches` entries: any one hit applies the
         # rule. Note these are regexes, so they anchor with ^.
         window-rules = [
+          {
+            # No `matches` -- applies to every window. Small radius for a
+            # subtle rounded look rather than a pronounced pill shape.
+            geometry-corner-radius = 6;
+            clip-to-geometry = true;
+          }
           {
             matches = [
               # Steam sets app-id "steam_app_<appid>" on the game window
