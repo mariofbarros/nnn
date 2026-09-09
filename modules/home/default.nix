@@ -22,6 +22,7 @@
       self.homeModules.xdg
       self.homeModules.gaming
       self.homeModules.nx
+      self.homeModules.sung
     ];
 
     home.stateVersion = "26.05";

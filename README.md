@@ -36,6 +36,9 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - starship (prompt)
 - [fetch](https://github.com/areofyl/fetch) (system info)
 
+**Media**
+- [Sung](https://github.com/yappologistic/Sung) — Material 3 music player (YouTube Music, local files, Subsonic/Navidrome), packaged from source in `modules/home/sung/`
+
 **Theming**
 - Tokyo Night palette (single source of truth in `lib/palette.nix`) — kitty, niri's window borders, tuigreet, SearXNG's web UI
 - Bibata cursors
@@ -59,6 +62,7 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - **A safe noctalia-shell settings export.** `nx noctalia-export` writes to scratch files first and only replaces the tracked `noctalia.json` if the whole export succeeded, avoiding a self-truncation bug where redirecting straight onto the tracked file could wipe it before the export ran.
 - **Proper ABNT2 support.** Brazilian keyboard layout configured as separate `layout`/`variant` fields (`br` / `abnt2`) rather than a combined string, in both niri's input config and the console keymap.
 - **Gaming configurations** for an optimized AMD gaming experience: full Vulkan/OpenGL driver stack (radv + 32-bit), Steam's gamescope session, gamemode, gamescope, MangoHud, LACT, protonup, lutris, heroic, bottles, plus gaming-friendly sysctl tunables. Proton tuning and window placement are declarative; the three overlay/wrapper tools stay per-game by design — see [Steam launch options](docs/steam-launch-options.md).
+- **Sung, packaged from source.** [Sung](https://github.com/yappologistic/Sung) is a native Material 3 music player (YouTube Music, local files, Subsonic/Navidrome) that isn't in nixpkgs and ships an Arch-oriented installer. `modules/home/sung/` packages it properly instead: the Qt6/C++ app builds via CMake, and the Python backend gets a Nix-built `ytmusicapi`/`yt-dlp` environment wired in through `SUNG_PYTHON` rather than the upstream script's pip venv, with ffmpeg and Node.js (needed by yt-dlp's JS challenge solver) on its `PATH`.
 - **Centralized theming constants.** Cursor theme and the Tokyo Night color palette each live in one file under `lib/` (`cursor-theme.nix`, `palette.nix`) instead of being hand-copied across every consumer — kitty, niri, and greetd all import the same `lib/palette.nix` values, so the colors can only drift where a file (like the static SearXNG CSS) genuinely can't consume Nix values directly.
 
 ## Repository structure
@@ -105,6 +109,10 @@ modules/
       default.nix       flake.homeModules.nx entry point
       _impl/            cmd-*/helpers-*/dispatcher — not auto-discovered
                          by import-tree (path contains "/_")
+    sung/               Sung music player, packaged here (not in nixpkgs)
+      default.nix       flake.homeModules.sung entry point
+      _package.nix      the derivation — underscore-prefixed so import-tree
+                         skips it; consumed via callPackage
   hosts/my-machine/     the nix-btw host definition
     configuration.nix   system-level config: users, locale, fish, fonts, cursor theme
     hardware.nix        hardware configuration
@@ -134,4 +142,8 @@ launch option.
 [tony](https://www.youtube.com/@tony-btw),
 [Vimjoyer](https://www.youtube.com/@vimjoyer),
 [Lunobe/Nx](https://github.com/Lunobe/Nx) (the `nx` fish CLI is vendored
-from here, see [docs/nx.md](docs/nx.md))
+from here, see [docs/nx.md](docs/nx.md)),
+[yappologistic/Sung](https://github.com/yappologistic/Sung) (the music
+player packaged in `modules/home/sung/`; upstream is MIT-licensed, all
+credit for the application itself goes to its authors — this repo only
+adds the Nix packaging)
