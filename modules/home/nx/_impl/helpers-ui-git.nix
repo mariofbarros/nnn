@@ -115,6 +115,50 @@
       end
     '';
 
+    # fetches origin and, if HEAD is only *behind* (never ahead), fast-
+    # forwards local HEAD to match — always conflict-free by definition.
+    # If HEAD has also diverged (both ahead and behind), refuses and tells
+    # the caller to resolve manually rather than risk an unattended rebase.
+    # Called before any staging/commit by deploy/up/push so a stale local
+    # branch never gets new auto-commits piled on top of it. Offline or no
+    # upstream configured is not an error -- just skip the check.
+    __nx_git_sync = ''
+      git -C ${repoDir} fetch origin >/dev/null 2>&1
+      if test $status -ne 0
+        __nx_warn "Couldn't reach 'origin' (offline?) — skipping remote sync check."
+        return 0
+      end
+
+      set -l upstream (git -C ${repoDir} rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null)
+      if test -z "$upstream"
+        __nx_warn "No upstream branch configured — skipping remote sync check."
+        return 0
+      end
+
+      set -l counts (git -C ${repoDir} rev-list --left-right --count 'HEAD...@{u}')
+      set -l parts (string split -m1 \t -- $counts)
+      set -l ahead $parts[1]
+      set -l behind $parts[2]
+
+      if test "$behind" -eq 0
+        return 0
+      end
+
+      if test "$ahead" -eq 0
+        __nx_stage "Fast-forwarding to $upstream"
+        git -C ${repoDir} merge --ff-only "$upstream"
+        if test $status -ne 0
+          __nx_fail "Fast-forward failed unexpectedly — check 'git -C ${repoDir} status'."
+          return 1
+        end
+        __nx_ok
+        return 0
+      end
+
+      __nx_fail "Local and $upstream have diverged ($ahead ahead, $behind behind) — resolve manually with 'git -C ${repoDir} pull --rebase', then retry."
+      return 1
+    '';
+
     __nx_untrack_ignored = ''
       set -l tracked_ignored (git -C ${repoDir} ls-files -ci --exclude-standard)
       if test (count $tracked_ignored) -eq 0

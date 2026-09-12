@@ -8,6 +8,9 @@
 
   programs.fish.functions = {
     __nx_cmd_deploy = ''
+      __nx_git_sync
+      or return 1
+
       __nx_stage "Checking for local changes"
       # stage only (no commit yet) — needed so Nix can see new/changed
       # files while building; the commit itself waits until confirmed

@@ -50,6 +50,16 @@ local edits anyway to fit this repo's layout.
 - **`doctor`** — `format`, update flake inputs, `deploy`, `clean --keep
   7`, `push`, in that order.
 
+## Multi-host sync
+
+`deploy`, `up`, and `push` all fetch `origin` first. If local is only
+behind, it's fast-forwarded automatically (always conflict-free). If
+local and remote have both diverged, the command stops before making any
+new commits and tells you to run `git pull --rebase` manually — this
+keeps auto-commits from ever landing on top of a stale base, which
+matters here since this repo is deployed from two machines (desktop and
+laptop) against the same branch.
+
 ## Wiring
 
 `repoDir`/`hostName` are supplied via `home-manager.extraSpecialArgs` in

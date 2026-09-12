@@ -20,6 +20,9 @@
     # skipped; run nx up whenever you want the latest inputs built and
     # switched in
     __nx_cmd_up = ''
+      __nx_git_sync
+      or return 1
+
       __nx_stage "Checking for local changes"
       __nx_confirm_and_commit "Commit these and update flake inputs?" "nx: auto-commit before update"
       or return 1
@@ -88,6 +91,9 @@
     '';
 
     __nx_cmd_push = ''
+      __nx_git_sync
+      or return 1
+
       __nx_stage "Checking for local changes"
       __nx_confirm_and_commit "Commit and push these to the remote?" "nx: update"
       or return 1
