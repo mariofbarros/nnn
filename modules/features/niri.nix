@@ -23,6 +23,11 @@ let
       variant = "abnt2";
     };
 
+    # Without this, libinput only registers a physical click (pressing the
+    # whole clickpad down), not a light tap -- a no-op on the desktop's
+    # mouse, but needed on the laptop's touchpad.
+    input.touchpad.tap = _: { };
+
     # Capped with max-scroll-amount so it only kicks in when it won't
     # scroll the view -- niri's own recommended default. Without the
     # cap, moving the mouse near a partially-off-screen window can
