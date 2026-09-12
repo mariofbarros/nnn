@@ -3,12 +3,13 @@ let
   # Shared with modules/hosts/*/configuration.nix's XCURSOR_THEME /
   # XCURSOR_SIZE session variables -- keep both in sync via this file.
   cursorTheme = import ../../lib/cursor-theme.nix;
-  palette = import ../../lib/palette.nix;
+  tokyoNight = import ../../lib/palette-tokyo-night.nix;
+  everforest = import ../../lib/palette-everforest.nix;
 
   # Shared between hosts (desktop, laptop, ...): everything that isn't
-  # tied to a specific physical monitor layout. `outputs` and `gameOutput`
-  # are the only per-host knobs -- see the two perSystem.packages below.
-  mkNiriSettings = { pkgs, lib, self', outputs, gameOutput ? null, brightnessKeys ? false, noctaliaPackage ? "myNoctalia" }: {
+  # tied to a specific physical monitor layout. `outputs`, `gameOutput` and
+  # `palette` are the per-host knobs -- see the two perSystem.packages below.
+  mkNiriSettings = { pkgs, lib, self', outputs, palette, gameOutput ? null, brightnessKeys ? false, noctaliaPackage ? "myNoctalia" }: {
     prefer-no-csd = _:{ };
 
     spawn-at-startup = [
@@ -38,7 +39,7 @@ let
     inherit outputs;
 
     layout.gaps = 8;
-    layout.focus-ring.active-color = palette.accent; # Tokyo Night blue, matches kitty
+    layout.focus-ring.active-color = palette.accent; # matches kitty's accent on this host
     layout.focus-ring.width = 2;
 
     window-rules = [
@@ -156,6 +157,7 @@ in {
       inherit pkgs;
       settings = mkNiriSettings {
         inherit pkgs lib self';
+        palette = tokyoNight;
         outputs = {
           "DP-3" = {
             position = _: { props = { x = 0; y = 0; }; };
@@ -181,6 +183,7 @@ in {
       inherit pkgs;
       settings = mkNiriSettings {
         inherit pkgs lib self';
+        palette = everforest;
         outputs = {
           "eDP-1" = {
             position = _: { props = { x = 0; y = 0; }; };

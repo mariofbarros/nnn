@@ -1,6 +1,6 @@
 # nnn | NixOS + Niri + Noctalia
 
-A personal NixOS flake configuration for a niri-based Wayland desktop. Built around a scrollable-tiling workflow, a modular file-per-concern structure, and a mostly Tokyo Night-leaning look across the terminal and compositor.
+A personal NixOS flake configuration for a niri-based Wayland desktop. Built around a scrollable-tiling workflow, a modular file-per-concern structure, and a per-host theme (Tokyo Night on the desktop, Everforest on the laptop) across the terminal and compositor.
 <img width="1917" height="1075" alt="image" src="https://github.com/user-attachments/assets/9062f4f3-0431-42d2-a3bb-48eaf4d6849b" />
 
 
@@ -40,7 +40,7 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - [Sung](https://github.com/yappologistic/Sung) — Material 3 music player (YouTube Music, local files, Subsonic/Navidrome), packaged from source in `modules/home/sung/`
 
 **Theming**
-- Tokyo Night palette (single source of truth in `lib/palette.nix`) — kitty, niri's window borders, tuigreet, SearXNG's web UI
+- Per-host palette — Tokyo Night on the desktop (`lib/palette-tokyo-night.nix`), Everforest on the laptop (`lib/palette-everforest.nix`) — kitty, niri's window borders, tuigreet, SearXNG's web UI, and noctalia-shell's own color scheme all follow whichever palette matches the host
 - Bibata cursors
 - Iosevka Nerd Font
 - adw-gtk3, Papirus icons, and qt6ct as a shared dark baseline for the GTK/Qt applications
@@ -63,17 +63,20 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - **Proper ABNT2 support.** Brazilian keyboard layout configured as separate `layout`/`variant` fields (`br` / `abnt2`) rather than a combined string, in both niri's input config and the console keymap.
 - **Gaming configurations** for an optimized AMD gaming experience: full Vulkan/OpenGL driver stack (radv + 32-bit), Steam's gamescope session, gamemode, gamescope, MangoHud, LACT, protonup, lutris, heroic, bottles, plus gaming-friendly sysctl tunables. Proton tuning and window placement are declarative; the three overlay/wrapper tools stay per-game by design — see [Steam launch options](docs/steam-launch-options.md).
 - **Sung, packaged from source.** [Sung](https://github.com/yappologistic/Sung) is a native Material 3 music player (YouTube Music, local files, Subsonic/Navidrome) that isn't in nixpkgs and ships an Arch-oriented installer. `modules/home/sung/` packages it properly instead: the Qt6/C++ app builds via CMake, and the Python backend gets a Nix-built `ytmusicapi`/`yt-dlp` environment wired in through `SUNG_PYTHON` rather than the upstream script's pip venv, with ffmpeg and Node.js (needed by yt-dlp's JS challenge solver) on its `PATH`.
-- **Centralized theming constants.** Cursor theme and the Tokyo Night color palette each live in one file under `lib/` (`cursor-theme.nix`, `palette.nix`) instead of being hand-copied across every consumer — kitty, niri, and greetd all import the same `lib/palette.nix` values, so the colors can only drift where a file (like the static SearXNG CSS) genuinely can't consume Nix values directly.
+- **Centralized, per-host theming constants.** Cursor theme lives in one shared file under `lib/` (`cursor-theme.nix`); the color palette instead has one file per host theme (`palette-tokyo-night.nix`, `palette-everforest.nix`), and each consumer (kitty, niri, greetd) picks between them by `hostName`/`networking.hostName` rather than hand-copying colors. noctalia-shell's `predefinedScheme` and the static SearXNG CSS (which can't consume Nix values directly) are kept in sync with the same two palettes by hand.
 
 ## Repository structure
 
 ```
 lib/                    shared constants, imported by multiple modules
-  palette.nix           Tokyo Night colors (single source of truth)
+  palette-tokyo-night.nix  desktop (my-machine) color palette
+  palette-everforest.nix   laptop (nixbook) color palette
   cursor-theme.nix      cursor name/size, shared by niri + session vars
 assets/                 static files consumed via absolute paths (not Nix-built)
   profile/pp.png        noctalia-shell avatar image
   walls/                wallpaper directory
+  noctalia-everforest-scheme.json  custom noctalia-shell color scheme, dropped into
+                                    ~/.config/noctalia/colorschemes on the laptop
 modules/
   parts.nix             flake-parts perSystem `systems` list
   features/             system-level modules (auto-discovered by import-tree)
@@ -88,7 +91,8 @@ modules/
     starship.nix        prompt config
     searxng/            SearXNG service
       searxng.nix
-      searxng-tokyo-night.css
+      searxng-tokyo-night.css  desktop reskin
+      searxng-everforest.css  laptop reskin
     gaming.nix          gaming stack: AMD drivers, Steam/gamescope, gamemode, LACT, sysctl
     greetd.nix          greetd + tuigreet display manager
     apps.nix            rescue/admin CLI tools + bibata-cursors (needed system-wide by greetd)
@@ -98,6 +102,7 @@ modules/
     apps.nix            personal apps + dev tooling (home.packages)
     kitty.nix           terminal config (per-user ~/.config/kitty)
     theming.nix         gsettings-backed GTK4/libadwaita + Qt theming
+    noctalia-theme.nix  drops the Everforest scheme into ~/.config/noctalia (laptop only)
     fetch.nix           fetch config
     xdg.nix             mimeapps.list defaults
     gaming.nix          per-user MangoHud overlay + gamemode settings

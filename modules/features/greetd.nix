@@ -11,11 +11,14 @@
 
       settings.default_session.command =
         let
-          # Tokyo Night, from the shared lib/palette.nix palette -- same accent
-          # blue as the terminal border and window focus ring, same muted
-          # violet-gray as secondary text, same teal reserved for a distinct
-          # interactive value (kitty's url_color; here, typed input).
-          colors = import ../../lib/palette.nix;
+          # Tokyo Night on the desktop, Everforest on the laptop -- same
+          # accent color as the terminal border and window focus ring, same
+          # muted tone for secondary text, same teal/aqua reserved for a
+          # distinct interactive value (kitty's url_color; here, typed input).
+          colors =
+            if config.networking.hostName == "nixbook"
+            then import ../../lib/palette-everforest.nix
+            else import ../../lib/palette-tokyo-night.nix;
           theme = lib.concatStringsSep ";" [
             "border=${colors.accent}"
             "container=${colors.bg1}"

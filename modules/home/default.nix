@@ -23,6 +23,7 @@
       self.homeModules.gaming
       self.homeModules.nx
       self.homeModules.sung
+      self.homeModules.noctaliaTheme
     ];
 
     home.stateVersion = "26.05";
