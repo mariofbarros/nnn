@@ -1,28 +1,18 @@
 { self, inputs, ... }: {
-  perSystem = { pkgs, ... }: let
-    baseSettings = builtins.fromJSON (builtins.readFile ./noctalia.json);
-  in {
+  perSystem = { pkgs, ... }: {
+    # Desktop (my-machine) and laptop (nixbook) keep separate settings
+    # files rather than one shared file with an override merged on top --
+    # their bar layouts have diverged beyond just monitors/screenOverrides
+    # (different widget sets), so a single base + patch no longer covered
+    # the real difference between the two.
     packages.myNoctalia = inputs.wrapper-modules.wrappers.noctalia-shell.wrap {
       inherit pkgs;
-      settings = baseSettings;
+      settings = builtins.fromJSON (builtins.readFile ./noctalia-desktop.json);
     };
 
-    # Single-output variant for laptop hosts. noctalia.json's bar.monitors
-    # and bar.screenOverrides pin the desktop's two real output names
-    # (DP-3/HDMI-A-1) plus a distinct widget set for each -- neither output
-    # exists on a one-screen machine, so the bar would never attach
-    # anywhere. Clearing both falls back to noctalia's "every monitor it
-    # sees" default (just the one panel on a laptop), using the base
-    # `bar.widgets` layout, which already mirrors the desktop's primary
-    # screen.
     packages.myNoctaliaLaptop = inputs.wrapper-modules.wrappers.noctalia-shell.wrap {
       inherit pkgs;
-      settings = baseSettings // {
-        bar = baseSettings.bar // {
-          monitors = [];
-          screenOverrides = [];
-        };
-      };
+      settings = builtins.fromJSON (builtins.readFile ./noctalia-laptop.json);
     };
   };
 }
