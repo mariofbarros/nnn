@@ -5,11 +5,12 @@ let
   cursorTheme = import ../../../lib/cursor-theme.nix;
 in {
 
-  flake.nixosModules.myMachineConfiguration = { pkgs, lib, ... }: {
+  flake.nixosModules.nixbookConfiguration = { pkgs, lib, ... }: {
     # import any other modules from here
     imports = [
-      self.nixosModules.myMachineHardware
-      self.nixosModules.niriDesktop
+      self.nixosModules.nixbookHardware
+      self.nixosModules.niriLaptop
+      self.nixosModules.laptopPower
       self.nixosModules.greetd
       self.nixosModules.apps
       self.nixosModules.portals
@@ -19,7 +20,7 @@ in {
       self.nixosModules.searxng
       self.nixosModules.gaming
       self.nixosModules.defaultApps
-      self.nixosModules.homeManager
+      self.nixosModules.nixbookHomeManager
     ];
 
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -36,7 +37,7 @@ in {
       stdenv.cc.cc.lib
     ];
 
-    networking.hostName = "nix-btw";
+    networking.hostName = "nixbook";
     networking.networkmanager.enable = true;
     time.timeZone = "America/Sao_Paulo";
     i18n.defaultLocale = "en_US.UTF-8";
