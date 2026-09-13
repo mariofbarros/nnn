@@ -28,6 +28,11 @@ let
     # mouse, but needed on the laptop's touchpad.
     input.touchpad.tap = _: { };
 
+    # libinput's accel-speed range is -1 (slowest) .. 0 (default) .. 1
+    # (fastest); with the default "adaptive" accel-profile (unset here),
+    # 0.2 is ~20% faster than neutral.
+    input.mouse.accel-speed = 0.2;
+
     # Capped with max-scroll-amount so it only kicks in when it won't
     # scroll the view -- niri's own recommended default. Without the
     # cap, moving the mouse near a partially-off-screen window can
