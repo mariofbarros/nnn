@@ -30,8 +30,8 @@ let
 
     # libinput's accel-speed range is -1 (slowest) .. 0 (default) .. 1
     # (fastest); with the default "adaptive" accel-profile (unset here),
-    # 0.2 is ~20% faster than neutral.
-    input.mouse.accel-speed = 0.2;
+    # 0.4 is ~40% faster than neutral (two +20% bumps stacked).
+    input.mouse.accel-speed = 0.4;
 
     # Capped with max-scroll-amount so it only kicks in when it won't
     # scroll the view -- niri's own recommended default. Without the
