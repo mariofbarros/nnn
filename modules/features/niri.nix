@@ -31,7 +31,14 @@ let
     # libinput's accel-speed range is -1 (slowest) .. 0 (default) .. 1
     # (fastest); with the default "adaptive" accel-profile (unset here),
     # 0.4 is ~40% faster than neutral (two +20% bumps stacked).
+    #
+    # Set on both mouse and touchpad: on the laptop, the clickpad's
+    # firmware exposes a second, inert "ASUF1200 Mouse" evdev node
+    # alongside the real ABS-based touchpad node, so input.mouse alone
+    # never actually reaches the touchpad's pointer motion -- without
+    # this, only a genuine external mouse would feel the speed bump.
     input.mouse.accel-speed = 0.4;
+    input.touchpad.accel-speed = 0.4;
 
     # Capped with max-scroll-amount so it only kicks in when it won't
     # scroll the view -- niri's own recommended default. Without the
