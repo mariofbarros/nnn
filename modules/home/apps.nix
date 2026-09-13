@@ -36,6 +36,7 @@
       love
       
       docker
+      github-cli
     ];
   };
 }
