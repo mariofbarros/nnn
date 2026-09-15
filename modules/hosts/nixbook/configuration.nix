@@ -25,12 +25,10 @@ in {
 
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-    nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.default ];
-
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    boot.kernelPackages = pkgs.linuxKernel.packagesFor pkgs.cachyosKernels.linux-cachyos-latest;
+    boot.kernelPackages = pkgs.linuxPackages;
 
     programs.nix-ld.enable = true;
     programs.nix-ld.libraries = with pkgs; [
