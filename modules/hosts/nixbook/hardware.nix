@@ -30,5 +30,14 @@ flake.nixosModules.nixbookHardware = { config, lib, pkgs, modulesPath, ... }:
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  # This laptop's RTL8821CE wifi (rtw88_8821ce) has an upstream-documented
+  # ASPM/power-save (LPS) conflict that hard-freezes the whole machine with
+  # no kernel log -- the only recovery is a hard reset. Disabling ASPM for
+  # the driver and disabling wifi power-saving are the known mitigations.
+  boot.extraModprobeConfig = ''
+    options rtw88_pci disable_aspm=1
+  '';
+  networking.networkmanager.wifi.powersave = false;
 };
 }

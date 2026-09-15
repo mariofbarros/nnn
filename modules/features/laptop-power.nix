@@ -23,10 +23,14 @@
     # Backlight control for niri's laptop keybinds (see niriLaptop).
     environment.systemPackages = [ pkgs.brightnessctl ];
 
-    # Suspend on lid close, on battery or AC alike -- logind's default,
-    # kept explicit since it's the behavior a laptop config depends on.
-    services.logind.settings.Login.HandleLidSwitch = "suspend";
-    services.logind.settings.Login.HandleLidSwitchExternalPower = "suspend";
+    # Lock (not suspend) on lid close. s2idle is the only sleep state this
+    # hardware's firmware exposes, and it reliably hard-crashes on this
+    # machine (rtw88_8821ce + AMD s2idle bug) -- every suspend entry in the
+    # logs is followed by a silent hard reboot, never a resume. Locking
+    # avoids triggering that path; `systemctl suspend` still works manually
+    # if you want to risk it once a fix (BIOS update) is confirmed.
+    services.logind.settings.Login.HandleLidSwitch = "lock";
+    services.logind.settings.Login.HandleLidSwitchExternalPower = "lock";
 
     # Noctalia's own "lock on suspend" setting only fires when *it*
     # initiates the suspend via its idle timer -- it has no listener on
