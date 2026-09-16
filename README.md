@@ -38,6 +38,17 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 
 **Media**
 - [Sung](https://github.com/yappologistic/Sung) — Material 3 music player (YouTube Music, local files, Subsonic/Navidrome), packaged from source in `modules/home/sung/`
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp), [Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF) (desktop app), [AppFlowy](https://github.com/AppFlowy-IO/AppFlowy) — home-manager packages, `modules/home/apps.nix`
+
+**Self-hosted services** (`modules/features/`)
+- [SearXNG](https://github.com/searxng/searxng) — metasearch, native NixOS service
+- [homepage](https://github.com/gethomepage/homepage) — dashboard linking the services below, native NixOS service
+- [Reactive Resume](https://github.com/reactive-resume/reactive-resume) — resume builder, docker compose (no nixpkgs package)
+- [Wazuh](https://github.com/wazuh/wazuh) — SIEM (manager + indexer + dashboard), docker compose, single-node (no nixpkgs package)
+- All bound to loopback only; see `modules/features/*/docker-compose.yml` for what was changed from upstream
+
+**Security**
+- ClamAV (`services.clamav`) — daemon + freshclam updater + weekly scan of `/home`, `modules/features/clamav.nix`
 
 **Theming**
 - Per-host palette — Tokyo Night on the desktop (`lib/palette-tokyo-night.nix`), Everforest on the laptop (`lib/palette-everforest.nix`) — kitty, niri's window borders, tuigreet, SearXNG's web UI, and noctalia-shell's own color scheme all follow whichever palette matches the host
@@ -93,6 +104,14 @@ modules/
       searxng.nix
       searxng-tokyo-night.css  desktop reskin
       searxng-everforest.css  laptop reskin
+    homepage.nix        homepage dashboard, links to the services below
+    reactive-resume/    Reactive Resume, docker compose (no nixpkgs package)
+      reactive-resume.nix
+      docker-compose.yml  trimmed from upstream's compose.yml
+    wazuh/               Wazuh SIEM, docker compose single-node (no nixpkgs package)
+      wazuh.nix
+      docker-compose.yml, generate-indexer-certs.yml, config/  from wazuh-docker's single-node/
+    clamav.nix          ClamAV daemon + updater + scheduled scan
     gaming.nix          gaming stack: AMD drivers, Steam/gamescope, gamemode, LACT, sysctl
     greetd.nix          greetd + tuigreet display manager
     apps.nix            rescue/admin CLI tools + bibata-cursors (needed system-wide by greetd)

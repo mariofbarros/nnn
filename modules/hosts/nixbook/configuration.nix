@@ -20,6 +20,10 @@ in {
       self.nixosModules.searxng
       self.nixosModules.gaming
       self.nixosModules.defaultApps
+      self.nixosModules.clamav
+      self.nixosModules.homepage
+      self.nixosModules.reactiveResume
+      self.nixosModules.wazuh
       self.nixosModules.nixbookHomeManager
     ];
 

@@ -34,8 +34,13 @@
       cmatrix
       chromium
       love
-      
+
+      yt-dlp
+      stirling-pdf-desktop
+      appflowy
+
       docker
+      docker-compose
       github-cli
     ];
   };
