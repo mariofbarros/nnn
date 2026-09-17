@@ -57,6 +57,7 @@
 
       nemo-with-extensions
       loupe
+      gparted
       p7zip
       unrar
       vlc
