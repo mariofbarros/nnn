@@ -6,6 +6,12 @@
     # bibata-cursors, which XCURSOR_THEME needs system-wide since greetd's
     # login screen renders before any user session (and its home-manager
     # profile) exists.
+
+    # Nemo (modules/home/apps.nix) needs gvfs for trash, network locations
+    # (smb://, sftp://) and removable-media mounting -- Dolphin never
+    # needed this since it shipped its own KIO backend instead.
+    services.gvfs.enable = true;
+
     environment.systemPackages = with pkgs; [
       wget
       git

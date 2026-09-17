@@ -55,9 +55,7 @@
   in {
     home.packages = with pkgs; [
 
-      kdePackages.dolphin
-      kdePackages.kio
-      kdePackages.kio-extras
+      nemo-with-extensions
       p7zip
       unrar
       vlc

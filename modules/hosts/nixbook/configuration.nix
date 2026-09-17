@@ -24,6 +24,7 @@ in {
       self.nixosModules.homepage
       self.nixosModules.reactiveResume
       self.nixosModules.wazuh
+      self.nixosModules.secrets
       self.nixosModules.nixbookHomeManager
     ];
 

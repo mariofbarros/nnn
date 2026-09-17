@@ -14,6 +14,11 @@
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Companion CLI for late.sh (packages.${system}.late) -- local audio
     # playback synced to the public `ssh late.sh` session.
     late-sh = {
