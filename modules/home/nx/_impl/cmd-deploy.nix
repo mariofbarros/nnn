@@ -12,8 +12,8 @@
       or return 1
 
       __nx_stage "Checking for local changes"
-      # stage only (no commit yet) — needed so Nix can see new/changed
-      # files while building; the commit itself waits until confirmed
+      # Stage only (no commit yet) — needed so Nix can see new/changed
+      # files while building; the commit itself waits until confirmed.
       git -C ${repoDir} add -A
       __nx_ok
       set -l proceed yes
@@ -30,10 +30,10 @@
 
       switch "$proceed"
         case yes
-          # commit now, so the tree is clean for nix flake check/build
+          # Commit now, so the tree is clean for nix flake check/build
           # (avoids a spurious "Git tree is dirty" warning) — but if
           # either fails, roll the commit back with __nx_rollback_commit
-          # so a broken config never lingers in history
+          # so a broken config never lingers in history.
           set -l pre_check_head (git -C ${repoDir} rev-parse HEAD)
           __nx_commit_quiet "nx: auto-commit before deploy"
 

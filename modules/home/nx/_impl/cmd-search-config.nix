@@ -40,26 +40,26 @@
             '
           end
         case meta
-          # locked flake's nixpkgs, not the registry — same reasoning
-          # as the install exact-match check above
+          # Locked flake's nixpkgs, not the registry — same reasoning
+          # as the install exact-match check above.
           nix eval --json "${repoDir}#nixosConfigurations.${hostName}.pkgs.$argv[3].meta" | ${pkgs.jq}/bin/jq .
         case search
           nix search nixpkgs $argv[3..-1]
         case lib
           __nx_manix_ensure_cache
           set -l query (string join ' ' $argv[3..-1])
-          # scoped to nixpkgs/lib docs + inline comments — option lookup is
+          # Scoped to nixpkgs/lib docs + inline comments — option lookup is
           # already covered, more accurately, by the 'option' case above
-          # (live against this exact flake, not a prebuilt cache)
+          # (live against this exact flake, not a prebuilt cache).
           ${pkgs.manix}/bin/manix --source nixpkgs-doc,nixpkgs-tree,nixpkgs-comments "$query"
         case '*'
           nix search nixpkgs $argv[2..-1]
       end
     '';
 
-    # builds manix's doc cache on first use only — subsequent 'nx search lib'
+    # Builds manix's doc cache on first use only — subsequent 'nx search lib'
     # calls reuse it; if nixpkgs moves on and the cache goes stale, delete
-    # ~/.cache/manix by hand to force a rebuild
+    # ~/.cache/manix by hand to force a rebuild.
     __nx_manix_ensure_cache = ''
       if not test -d ~/.cache/manix
         __nx_stage "Building manix cache (first run only)"

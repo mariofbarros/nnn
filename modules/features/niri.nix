@@ -61,7 +61,7 @@ let
     inherit outputs;
 
     layout.gaps = 8;
-    layout.focus-ring.active-color = palette.accent; # matches kitty's accent on this host
+    layout.focus-ring.active-color = palette.accent; # Matches kitty's accent on this host
     layout.focus-ring.width = 2;
 
     window-rules = [
@@ -142,9 +142,9 @@ let
 
       # Screenshots -- niri's built-in tool, saves to ~/Pictures/Screenshots
       # and copies to clipboard. No extra packages needed.
-      "Print".screenshot = _:{ };               # interactive region select
-      "Ctrl+Print".screenshot-screen = _:{ };    # whole current monitor
-      "Alt+Print".screenshot-window = _:{ };     # focused window
+      "Print".screenshot = _:{ };               # Interactive region select
+      "Ctrl+Print".screenshot-screen = _:{ };    # Whole current monitor
+      "Alt+Print".screenshot-window = _:{ };     # Focused window
     } // workspaceBinds // lib.optionalAttrs brightnessKeys {
       # Laptop backlight keys -- no-op on hosts without a `brightnessctl`-
       # controllable panel, so gated behind brightnessKeys rather than

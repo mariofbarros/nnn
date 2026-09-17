@@ -15,11 +15,11 @@
 
   programs.fish.functions = {
     __nx_config_files = ''
-      # walk the import graph starting at flake.nix, following relative-path
-      # references, so new modules are picked up automatically. a reference
+      # Walk the import graph starting at flake.nix, following relative-path
+      # references, so new modules are picked up automatically. A reference
       # may be a .nix file directly, or a bare directory (e.g. "./nx", the
-      # nix equivalent of "./nx/default.nix") — resolved below. references
-      # that are neither (e.g. a fish alias like "../..") are silently skipped
+      # nix equivalent of "./nx/default.nix") — resolved below. References
+      # that are neither (e.g. a fish alias like "../..") are silently skipped.
       set -l root ${repoDir}
       set -l seen $root/flake.nix
       set -l queue $root/flake.nix
@@ -54,8 +54,8 @@
       if test -z "$start"
         return 1
       end
-      # search only after $start, not the whole file — otherwise an
-      # earlier "];" belonging to some other list would be picked up
+      # Search only after $start, not the whole file — otherwise an
+      # earlier "];" belonging to some other list would be picked up.
       set -l tail_start (math $start + 1)
       set -l end (sed -n "$tail_start,\$ p" $file | grep -n '^    \];$' | head -n1 | cut -d: -f1)
       if test -z "$end"
@@ -76,8 +76,8 @@
       or return 0
       set -l items_start (math $bounds[1] + 1)
       set -l items_end (math $bounds[2] - 1)
-      # drop blank lines and #-comment section headers — only actual
-      # package attrs are meaningful for install/uninstall/list
+      # Drop blank lines and #-comment section headers — only actual
+      # package attrs are meaningful for install/uninstall/list.
       sed -n "$items_start,$items_end p" $file | string trim | string match -v -r '^(#.*)?$'
     '';
   };

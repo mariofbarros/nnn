@@ -38,8 +38,8 @@
       # No -W/-H/-r: omitting them lets gamescope inherit the display's own
       # native resolution/refresh rate instead of hardcoding one.
       args = [
-        "--adaptive-sync"     # variable refresh, if the display supports it
-        "--force-grab-cursor" # keeps the mouse captured -- matters more on Wayland
+        "--adaptive-sync"     # Variable refresh, if the display supports it
+        "--force-grab-cursor" # Keeps the mouse captured -- matters more on Wayland
       ];
     };
 

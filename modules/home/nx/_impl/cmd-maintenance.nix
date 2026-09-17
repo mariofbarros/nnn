@@ -6,19 +6,19 @@
   # docs). nuke-history lives in its own file (cmd-nuke-history.nix) —
   # unlike these, it rewrites history and isn't something you run routinely.
   #
-  # doctor deliberately does NOT call `nx up`: up only deploys when
+  # Doctor deliberately does NOT call `nx up`: up only deploys when
   # `nix flake update` actually changed flake.lock, so a doctor run whose
   # only pending changes are elsewhere (e.g. apps.nix) would commit and
-  # push them but never build/switch. doctor instead updates inputs itself
+  # push them but never build/switch. Doctor instead updates inputs itself
   # and always deploys exactly once afterward — deploy's own `git add -A`
   # picks up both the flake.lock bump and any other pending changes in one
   # commit/build/switch.
 
   programs.fish.functions = {
-    # updates flake.lock, then deploys — unless the update left flake.lock
+    # Updates flake.lock, then deploys — unless the update left flake.lock
     # unchanged, in which case there's nothing new to build and deploy is
     # skipped; run nx up whenever you want the latest inputs built and
-    # switched in
+    # switched in.
     __nx_cmd_up = ''
       __nx_git_sync
       or return 1
@@ -67,7 +67,7 @@
         return 1
       end
       if test "$all" = no
-        # no flags at all — default to --keep 7
+        # No flags at all — default to --keep 7
         if test -z "$keep"
           set keep 7
         end

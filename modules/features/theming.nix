@@ -1,9 +1,9 @@
 { self, inputs, ... }: {
   flake.nixosModules.theming = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
-      adw-gtk3           # clean dark GTK3/4-compatible theme
+      adw-gtk3           # Clean dark GTK3/4-compatible theme
       papirus-icon-theme
-      kdePackages.qt6ct  # lets Qt apps (OBS, VLC) follow a dark palette
+      kdePackages.qt6ct  # Lets Qt apps (OBS, VLC) follow a dark palette
     ];
 
     # QT_QPA_PLATFORMTHEME is set by home-manager's qt module instead (see

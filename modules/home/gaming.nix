@@ -47,7 +47,7 @@
     # specific title there if it needs something different.
     home.sessionVariables = {
       RADV_PERFTEST = "gpl";       # Graphics Pipeline Library -- cuts shader-compile stutter on radv (AMD)
-      PROTON_ENABLE_WAYLAND = "1"; # native Wayland Proton (GE-Proton/CachyOS Proton support this)
+      PROTON_ENABLE_WAYLAND = "1"; # Native Wayland Proton (GE-Proton/CachyOS Proton support this)
     };
   };
 }

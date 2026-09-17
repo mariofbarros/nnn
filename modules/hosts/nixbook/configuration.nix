@@ -6,7 +6,6 @@ let
 in {
 
   flake.nixosModules.nixbookConfiguration = { pkgs, lib, ... }: {
-    # import any other modules from here
     imports = [
       self.nixosModules.nixbookHardware
       self.nixosModules.niriLaptop
@@ -66,7 +65,7 @@ in {
       packages = with pkgs; [
         nerd-fonts.iosevka
       ];
-      fontconfig.enable = true; # usually on by default, explicit for clarity
+      fontconfig.enable = true; # Usually on by default, explicit for clarity
     };
 
     environment.sessionVariables = {

@@ -20,16 +20,16 @@
       end
 
       set -l pkg_attr
-      # resolve against the locked flake's own nixpkgs (not the global
+      # Resolve against the locked flake's own nixpkgs (not the global
       # flake registry) so an exact match here means the package really
-      # exists in the nixpkgs revision that will actually get deployed
+      # exists in the nixpkgs revision that will actually get deployed.
       set -l is_derivation (nix eval --raw --apply '(x: if (x.type or null) == "derivation" then "derivation" else "other")' "${repoDir}#nixosConfigurations.${hostName}.pkgs.$query" 2>/dev/null)
       if test "$is_derivation" = derivation
         set pkg_attr $query
       else
-        # the registry here is fine — this is just discovery, and a
+        # The registry here is fine — this is just discovery, and a
         # full recursive nix search over nixosConfigurations.*.pkgs
-        # fails outright on nixpkgs's handful of throwing attributes
+        # fails outright on nixpkgs's handful of throwing attributes.
         __nx_stage "No exact package '$query' — searching nixpkgs"
         set -l json (nix search nixpkgs $query --json 2>/dev/null)
         set -l search_status $status
