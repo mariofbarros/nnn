@@ -56,6 +56,7 @@
     home.packages = with pkgs; [
 
       nemo-with-extensions
+      loupe
       p7zip
       unrar
       vlc
