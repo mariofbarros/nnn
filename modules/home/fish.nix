@@ -15,6 +15,7 @@
       # were ported into the nx CLI (modules/home/nx/) as `nx switch` and
       # `nx noctalia-export`.
       shellAbbrs.fetch = "command fetch -l NixOS";
+      shellAbbrs.gparted = "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY ${pkgs.gparted}/bin/gparted";
     };
   };
 }
