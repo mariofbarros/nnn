@@ -14,6 +14,12 @@ let
 
     spawn-at-startup = [
       (lib.getExe self'.packages.${noctaliaPackage})
+      # GUI polkit auth agent -- without one, pkexec/sudo GUI prompts (e.g.
+      # `pkexec gparted`) fail outright: root can't attach to the
+      # Wayland/XWayland session, and there's no agent to authorize via
+      # D-Bus instead. polkit-gnome is unmaintained upstream but still the
+      # standard lightweight pick on niri/sway/hyprland setups.
+      "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
     ];
 
     xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
