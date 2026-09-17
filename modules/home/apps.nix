@@ -37,7 +37,7 @@
       version = "0.0.7";
       src = pkgs.fetchurl {
         url = "https://github.com/padovanl/portop/releases/download/v${version}/portop_${version}_linux_amd64.tar.gz";
-        hash = "sha256-KtvOwj6K5nI/di60r2Mpukp8N8gxLO6tPfnjVZijXGc=";
+        hash = "sha256-joukdKD0WTgTTL1hSOUGGq8VMvQHng/KCWG9VcwvtDU=";
       };
       sourceRoot = ".";
       installPhase = ''
