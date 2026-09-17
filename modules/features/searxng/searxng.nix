@@ -1,5 +1,10 @@
 { self, inputs, ... }: {
   flake.nixosModules.searxng = { pkgs, config, ... }: {
+    age.secrets.searxng-secret = {
+      file = ../../../secrets/searxng-secret.env.age;
+      owner = "searx";
+    };
+
     services.searx = {
       enable = true;
 
@@ -19,14 +24,19 @@
 
       redisCreateLocally = true;
 
-      # Keeps the secret key out of the world-readable /nix/store: this
-      # points at a plain file on disk (not built by Nix), read by systemd
-      # at service start.
-      environmentFile = "/var/lib/searxng/secret.env";
+      # Keeps the secret key out of the world-readable /nix/store: agenix
+      # decrypts it to a root-only tmpfs path at activation (see
+      # modules/features/secrets.nix and secrets/secrets.nix), read by
+      # systemd at service start.
+      environmentFile = config.age.secrets.searxng-secret.path;
 
       settings = {
         general.debug = false;
         server = {
+          # secret_key defaults to the package's own "ultrasecretkey"
+          # otherwise -- envsubst (run by searx-init, see upstream
+          # generateConfig) resolves this from environmentFile above.
+          secret_key = "$SEARXNG_SECRET";
 
           bind_address = "127.0.0.1";
           port = 8888;
