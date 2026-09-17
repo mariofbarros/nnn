@@ -50,6 +50,11 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 **Security**
 - ClamAV (`services.clamav`) — daemon + freshclam updater + weekly scan of `/home`, `modules/features/clamav.nix`
 
+**CLI tools** (`modules/home/apps.nix`, no nixpkgs package)
+- [tfm-tui](https://github.com/clarkarch/tfm-tui) — mouse-first terminal file manager, packaged from a prebuilt release binary
+- [portop](https://github.com/padovanl/portop) — htop-style view of what's using your ports, packaged from a prebuilt release binary
+- [late](https://github.com/mpiorowski/late-sh) — companion CLI for `ssh late.sh` (a public SSH social space), built from its own flake (`late-sh` input); local audio playback synced to that session, nothing self-hosted
+
 **Theming**
 - Per-host palette — Tokyo Night on the desktop (`lib/palette-tokyo-night.nix`), Everforest on the laptop (`lib/palette-everforest.nix`) — kitty, niri's window borders, tuigreet, SearXNG's web UI, and noctalia-shell's own color scheme all follow whichever palette matches the host
 - Bibata cursors
