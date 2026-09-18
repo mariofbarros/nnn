@@ -41,6 +41,14 @@
       echo ""
       echo $sep
       echo ""
+      echo "  pull          catch this checkout up with the remote, nothing else"
+      echo "                1. fetch, fast-forward if only behind, or stop if local and"
+      echo "                   remote have diverged (same __nx_git_sync deploy/up/push"
+      echo "                   already run as their own first step)"
+      echo "                2. no staging, no commit, no build/switch, no push"
+      echo ""
+      echo $sep
+      echo ""
       echo "  deploy        build and switch to the flake"
       echo "                1. sync with the remote: fetch, fast-forward if only"
       echo "                   behind, or stop if local and remote have diverged"
@@ -170,6 +178,7 @@
       echo ""
       echo "  format        format/lint every .nix file"
       echo "  switch        plain nixos-rebuild switch, verified against what's running"
+      echo "  pull          catch this checkout up with the remote, nothing else"
       echo "  deploy        build and switch to the flake"
       echo "  up            update flake inputs, then deploy (skipped if nothing changed)"
       echo "  clean         --keep <n> | --all — garbage-collect the Nix store"
@@ -192,6 +201,8 @@
           __nx_cmd_format $argv
         case switch
           __nx_cmd_switch $argv
+        case pull
+          __nx_cmd_pull $argv
         case deploy
           __nx_cmd_deploy $argv
         case up
@@ -232,6 +243,7 @@
     complete -c nx -f
     complete -c nx -n __fish_use_subcommand -a format -d 'format/lint .nix files'
     complete -c nx -n __fish_use_subcommand -a switch -d 'plain nixos-rebuild switch, verified against what is running'
+    complete -c nx -n __fish_use_subcommand -a pull -d 'catch this checkout up with the remote, nothing else'
     complete -c nx -n __fish_use_subcommand -a deploy -d 'check, build and switch to the flake'
     complete -c nx -n __fish_use_subcommand -a up -d 'update flake inputs, then deploy (skipped if unchanged)'
     complete -c nx -n __fish_use_subcommand -a clean -d 'garbage-collect the system (defaults to --keep 7)'

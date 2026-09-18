@@ -19,6 +19,7 @@
       ./_impl/helpers-config.nix
       ./_impl/cmd-deploy.nix
       ./_impl/cmd-switch.nix
+      ./_impl/cmd-pull.nix
       ./_impl/cmd-noctalia-export.nix
       ./_impl/cmd-format.nix
       ./_impl/cmd-maintenance.nix
