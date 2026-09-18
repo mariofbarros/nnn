@@ -88,12 +88,22 @@ in {
     # below to talk to it without sudo.
     virtualisation.docker.enable = true;
 
+    # secrets.nix enables sshd (key-only, PasswordAuthentication/root login
+    # off) but keeps the firewall closed by default. Flipped on here since
+    # this host is meant to be reachable from nixbook over the LAN --
+    # nix-btw stays LAN-only as long as the router isn't port-forwarding 22.
+    services.openssh.openFirewall = lib.mkForce true;
+
     users.users.mario = {
       isNormalUser = true;
       description = "mario";
       extraGroups = [ "networkmanager" "wheel" "plugdev" "docker" ];
       packages = with pkgs; [ ];
       shell = pkgs.fish;
+      openssh.authorizedKeys.keys = [
+        # nixbook, mario@nixbook's key (~/.ssh/id_ed25519.pub)
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC4fzwkGlBqPTkfUX3/DTftZt4xPEdGMnfW9L2iZYG2D mariofbarros@gmail.com"
+      ];
     };
 
     programs.fish.enable = true;
