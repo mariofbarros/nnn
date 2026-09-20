@@ -1,6 +1,6 @@
 { self, inputs, ... }: {
   # Personal dashboard linking to the other self-hosted services in this
-  # flake (SearXNG, Reactive Resume, Wazuh, VERT). Loopback-only by default
+  # flake (SearXNG, Reactive Resume, Wazuh, VERT, Cockpit). Loopback-only by default
   # (openFirewall stays false) since this is a single-box personal stack,
   # not a LAN-wide homelab dashboard.
   flake.nixosModules.homepage = { pkgs, ... }: {
@@ -16,6 +16,7 @@
             { "Reactive Resume" = [{ abbr = "RR"; href = "http://127.0.0.1:3000"; }]; }
             { "Wazuh dashboard" = [{ abbr = "WZ"; href = "https://127.0.0.1:443"; }]; }
             { VERT = [{ abbr = "VT"; href = "http://127.0.0.1:3030"; }]; }
+            { Cockpit = [{ abbr = "CP"; href = "https://127.0.0.1:9090"; }]; }
           ];
         }
       ];
@@ -45,6 +46,12 @@
               VERT = {
                 href = "http://127.0.0.1:3030";
                 description = "File converter (WASM, runs client-side)";
+              };
+            }
+            {
+              Cockpit = {
+                href = "https://127.0.0.1:9090";
+                description = "Service management panel (start/stop/logs)";
               };
             }
           ];

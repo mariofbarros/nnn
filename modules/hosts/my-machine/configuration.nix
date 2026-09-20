@@ -23,6 +23,7 @@ in {
       self.nixosModules.reactiveResume
       self.nixosModules.wazuh
       self.nixosModules.vert
+      self.nixosModules.cockpit
       self.nixosModules.secrets
       self.nixosModules.homeManager
     ];
