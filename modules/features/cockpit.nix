@@ -8,11 +8,19 @@
 # just gives a panel onto the live systemd/docker state instead of trying
 # to own deployment itself.
 { self, inputs, ... }: {
-  flake.nixosModules.cockpit = { ... }: {
+  flake.nixosModules.cockpit = { config, ... }: {
     # openFirewall defaults to false -- loopback-only, same as the rest of
     # this flake's self-hosted services. https://localhost:9090 (self-signed
     # cert); mario's already in "wheel" on both hosts, which is what
     # Cockpit checks for admin-level actions (start/stop/restart units).
     services.cockpit.enable = true;
+
+    # Cockpit's CSRF/Origin check only allows the module's own default
+    # (https://localhost:<port>) unless told otherwise -- 127.0.0.1 gets
+    # rejected with "received request from bad Origin" even though it's
+    # the same box, which is what homepage.nix links to.
+    services.cockpit.allowed-origins = [
+      "https://127.0.0.1:${toString config.services.cockpit.port}"
+    ];
   };
 }
