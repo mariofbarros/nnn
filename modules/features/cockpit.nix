@@ -1,7 +1,7 @@
 # Cockpit (cockpit-project.org) -- web GUI for managing what's actually
 # running on this box: start/stop/restart/logs for every systemd unit
 # (searx, clamav-daemon, homepage-dashboard, and the docker-compose-backed
-# reactive-resume/wazuh/vert units all show up here, since they're all
+# reactive-resume/vert units all show up here, since they're all
 # systemd units regardless of what's underneath), plus basic resource
 # graphs. Deliberately not Coolify or similar -- this repo's flake is
 # already the source of truth for what's deployed (`nx deploy`); Cockpit

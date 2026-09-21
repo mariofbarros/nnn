@@ -21,7 +21,6 @@ in {
       self.nixosModules.clamav
       self.nixosModules.homepage
       self.nixosModules.reactiveResume
-      self.nixosModules.wazuh
       self.nixosModules.vert
       self.nixosModules.cockpit
       self.nixosModules.secrets

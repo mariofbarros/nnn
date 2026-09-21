@@ -44,7 +44,6 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - [SearXNG](https://github.com/searxng/searxng) — metasearch, native NixOS service
 - [homepage](https://github.com/gethomepage/homepage) — dashboard linking the services below, native NixOS service
 - [Reactive Resume](https://github.com/reactive-resume/reactive-resume) — resume builder, docker compose (no nixpkgs package)
-- [Wazuh](https://github.com/wazuh/wazuh) — SIEM (manager + indexer + dashboard), docker compose, single-node (no nixpkgs package)
 - All bound to loopback only; see `modules/features/*/docker-compose.yml` for what was changed from upstream
 
 **Security**
@@ -113,9 +112,6 @@ modules/
     reactive-resume/    Reactive Resume, docker compose (no nixpkgs package)
       reactive-resume.nix
       docker-compose.yml  trimmed from upstream's compose.yml
-    wazuh/               Wazuh SIEM, docker compose single-node (no nixpkgs package)
-      wazuh.nix
-      docker-compose.yml, generate-indexer-certs.yml, config/  from wazuh-docker's single-node/
     clamav.nix          ClamAV daemon + updater + scheduled scan
     gaming.nix          gaming stack: AMD drivers, Steam/gamescope, gamemode, LACT, sysctl
     greetd.nix          greetd + tuigreet display manager
