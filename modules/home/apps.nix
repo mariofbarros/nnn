@@ -98,6 +98,7 @@
       docker
       docker-compose
       github-cli
+      prismlauncher
     ];
   };
 }
