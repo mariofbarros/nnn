@@ -25,6 +25,7 @@ in {
       self.nixosModules.vert
       self.nixosModules.cockpit
       self.nixosModules.secrets
+      self.nixosModules.gc
       self.nixosModules.nixbookHomeManager
     ];
 

@@ -10,6 +10,10 @@ A personal NixOS flake configuration for a niri-based Wayland desktop. Built aro
   changed from upstream, how it's wired in
 - [docs/steam-launch-options.md](docs/steam-launch-options.md) — what
   Steam/Proton config is declarative versus per-game
+- [docs/secrets.md](docs/secrets.md) — how agenix is wired up, adding or
+  rotating a secret, registering a new host as a recipient
+- [docs/new-machine.md](docs/new-machine.md) — bootstrapping a third host
+  (or reinstalling one) from scratch, disko partitioning included
 
 ## Overview
 
@@ -49,6 +53,12 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 **Security**
 - ClamAV (`services.clamav`) — daemon + freshclam updater + weekly scan of `/home`, `modules/features/clamav.nix`
 
+**Secrets**
+- [agenix](https://github.com/ryantm/agenix) — each host decrypts with its own SSH host key (`modules/features/secrets.nix`); recipients are managed in `secrets/secrets.nix`. See [docs/secrets.md](docs/secrets.md).
+
+**CI**
+- GitHub Actions (`.github/workflows/ci.yml`) — `nix flake check` plus a build matrix over both `nixosConfigurations`, using [magic-nix-cache](https://github.com/DeterminateSystems/magic-nix-cache-action) so no external cache account is needed. Catches a broken host config before it reaches `nx deploy`.
+
 **CLI tools** (`modules/home/apps.nix`, no nixpkgs package)
 - [tfm-tui](https://github.com/clarkarch/tfm-tui) — mouse-first terminal file manager, packaged from a prebuilt release binary
 - [portop](https://github.com/padovanl/portop) — htop-style view of what's using your ports, packaged from a prebuilt release binary
@@ -78,11 +88,18 @@ This repo defines a full NixOS system (`nix-btw`) from a single flake, using [fl
 - **Proper ABNT2 support.** Brazilian keyboard layout configured as separate `layout`/`variant` fields (`br` / `abnt2`) rather than a combined string, in both niri's input config and the console keymap.
 - **Gaming configurations** for an optimized AMD gaming experience: full Vulkan/OpenGL driver stack (radv + 32-bit), Steam's gamescope session, gamemode, gamescope, MangoHud, LACT, protonup, lutris, heroic, bottles, plus gaming-friendly sysctl tunables. Proton tuning and window placement are declarative; the three overlay/wrapper tools stay per-game by design — see [Steam launch options](docs/steam-launch-options.md).
 - **Sung, packaged from source.** [Sung](https://github.com/yappologistic/Sung) is a native Material 3 music player (YouTube Music, local files, Subsonic/Navidrome) that isn't in nixpkgs and ships an Arch-oriented installer. `modules/home/sung/` packages it properly instead: the Qt6/C++ app builds via CMake, and the Python backend gets a Nix-built `ytmusicapi`/`yt-dlp` environment wired in through `SUNG_PYTHON` rather than the upstream script's pip venv, with ffmpeg and Node.js (needed by yt-dlp's JS challenge solver) on its `PATH`.
+- **Unattended GC as a variation of `nx clean`.** `modules/features/gc.nix` runs the exact same `nix-collect-garbage --delete-older-than 7d` that `nx clean`'s default does (see `modules/home/nx/_impl/cmd-maintenance.nix`), just on a weekly systemd timer via the native `nix.gc` option — no external GC tool, just the manual command's own logic run automatically.
+- **CI-checked before it's deploy-checked.** Every push/PR builds both hosts' full system closure in GitHub Actions (`.github/workflows/ci.yml`), so a broken module is caught before `nx deploy` ever touches real hardware.
+- **A disko template, ready but inert.** `modules/features/disko.nix` declares a GPT/ESP/swap/ext4 layout via [disko](https://github.com/nix-community/disko), but neither host imports it — both are already partitioned. It's there for the next fresh install (see [docs/new-machine.md](docs/new-machine.md)), not applied to a running system.
 - **Centralized, per-host theming constants.** Cursor theme lives in one shared file under `lib/` (`cursor-theme.nix`); the color palette instead has one file per host theme (`palette-tokyo-night.nix`, `palette-everforest.nix`), and each consumer (kitty, niri, greetd) picks between them by `hostName`/`networking.hostName` rather than hand-copying colors. noctalia-shell's `predefinedScheme` and the static SearXNG CSS (which can't consume Nix values directly) are kept in sync with the same two palettes by hand.
 
 ## Repository structure
 
 ```
+.github/workflows/ci.yml  flake check + build matrix over both hosts (magic-nix-cache, no cache account needed)
+secrets/                agenix-encrypted secrets + the recipients manifest
+  secrets.nix           per-host SSH pubkeys -> which .age files they can decrypt
+  searxng-secret.env.age
 lib/                    shared constants, imported by multiple modules
   palette-tokyo-night.nix  desktop (my-machine) color palette
   palette-everforest.nix   laptop (nixbook) color palette
@@ -94,8 +111,15 @@ assets/                 static files consumed via absolute paths (not Nix-built)
                                     ~/.config/noctalia/colorschemes on the laptop
 modules/
   parts.nix             flake-parts perSystem `systems` list
+  schemas.nix           flake-schemas wiring, cosmetic `nix flake show` output only
   features/             system-level modules (auto-discovered by import-tree)
     niri.nix            compositor: keybinds, outputs, input, cursor
+    secrets.nix          agenix wiring; enables sshd solely to mint each host's
+                         SSH host key, used as its agenix identity
+    gc.nix               weekly unattended GC (`nix.gc`) -- the automated
+                         counterpart to `nx clean`'s default
+    disko.nix            GPT/ESP/swap/ext4 layout template; not imported by
+                         either host, kept for the next fresh install
     noctalia/           desktop shell package + settings
       noctalia.nix
       noctalia-desktop.json  my-machine's settings (regenerated by `nx noctalia-export`)
@@ -172,4 +196,13 @@ from here, see [docs/nx.md](docs/nx.md)),
 [yappologistic/Sung](https://github.com/yappologistic/Sung) (the music
 player packaged in `modules/home/sung/`; upstream is MIT-licensed, all
 credit for the application itself goes to its authors — this repo only
-adds the Nix packaging)
+adds the Nix packaging),
+[gvolpe/nix-config](https://github.com/gvolpe/nix-config) (inspiration for
+the CI build matrix in `.github/workflows/ci.yml`, the per-topic runbook
+docs under `docs/`, and the cosmetic `flake-schemas` wiring in
+`modules/schemas.nix`),
+[muhammadtalha-quant/nucleus](https://github.com/muhammadtalha-quant/nucleus)
+(inspiration for the `disko` partition template in
+`modules/features/disko.nix` and for scheduling unattended store cleanup —
+implemented here as a native `nix.gc` variation of `nx clean` rather than
+adopting nucleus's `programs.nh` directly)

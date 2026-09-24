@@ -26,7 +26,10 @@ local edits anyway to fit this repo's layout.
 - **`up`** — `nix flake update`, then `deploy` — skipped if the update
   left `flake.lock` unchanged.
 - **`clean --keep <n> | --all`** — garbage-collect the Nix store;
-  defaults to `--keep 7` (days).
+  defaults to `--keep 7` (days). `modules/features/gc.nix` runs the same
+  `nix-collect-garbage --delete-older-than 7d` unattended on a weekly
+  systemd timer (`nix.gc.automatic`), so the store doesn't grow unbounded
+  between manual runs.
 - **`list`** — print the packages currently in `modules/home/apps.nix`.
 - **`install <name>`** — resolve `<name>` in the locked nixpkgs (or
   search and let you pick), add it to `modules/home/apps.nix`, then

@@ -19,6 +19,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Declarative disk partitioning -- only used by modules/features/disko
+    # (see that file), which no current host imports. Kept for the next
+    # fresh install/reinstall, not applied to nix-btw/nixbook as they are.
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Adds human-readable descriptions to `nix flake show`/`nix flake
+    # metadata` output (see modules/schemas.nix). No functional effect.
+    flake-schemas.url = "github:DeterminateSystems/flake-schemas";
+
     # Companion CLI for late.sh (packages.${system}.late) -- local audio
     # playback synced to the public `ssh late.sh` session.
     late-sh = {
